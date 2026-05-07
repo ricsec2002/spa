@@ -1,0 +1,459 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.site{background:#0d0d10;color:#EAEAEA;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;min-height:600px}
+.page{display:none}.page.active{display:block}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 36px;height:56px;background:#111113;border-bottom:0.5px solid #1e1e24;position:sticky;top:0;z-index:99}
+.nav-logo{display:flex;align-items:center;gap:8px;cursor:pointer}
+.nav-wordmark{font-size:14px;font-weight:700;letter-spacing:-0.3px;color:#EAEAEA}
+.nav-wordmark span{color:#4A9EFF}
+.nav-links{display:flex;gap:4px;list-style:none}
+.nav-links button{font-size:12px;color:#555566;background:none;border:none;cursor:pointer;padding:6px 12px;border-radius:4px;transition:color .15s}
+.nav-links button:hover{color:#EAEAEA}
+.nav-links button.active{color:#EAEAEA;background:#1e1e24}
+.nav-cta{background:#4A9EFF;color:#fff;font-size:11px;font-weight:600;padding:7px 14px;border-radius:4px;border:none;cursor:pointer}
+
+/* SHARED */
+.btn-p{background:#4A9EFF;color:#fff;font-size:12px;font-weight:600;padding:10px 20px;border-radius:4px;border:none;cursor:pointer}
+.btn-s{background:transparent;color:#888896;font-size:12px;padding:10px 18px;border-radius:4px;border:0.5px solid #2a2a35;cursor:pointer}
+.section-tag{font-size:10px;letter-spacing:2.5px;color:#444451;margin-bottom:8px}
+.section-title{font-size:20px;font-weight:700;letter-spacing:-0.4px;color:#EAEAEA;margin-bottom:6px}
+
+/* ===================== HOME PAGE ===================== */
+.hero{display:grid;grid-template-columns:55% 45%;border-bottom:0.5px solid #1e1e24}
+.hero-l{padding:56px 36px;border-right:0.5px solid #1e1e24}
+.hero-eyebrow{font-size:10px;letter-spacing:3px;color:#444451;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.hero-dot{width:5px;height:5px;border-radius:50%;background:#00E5A0}
+.hero-h1{font-size:36px;font-weight:700;line-height:1.15;letter-spacing:-1px;color:#EAEAEA}
+.hero-h1 em{color:#4A9EFF;font-style:normal}
+.hero-sub{font-size:13px;color:#666677;line-height:1.7;margin:14px 0 26px;max-width:340px}
+.hero-btns{display:flex;gap:10px}
+.hero-tags{display:flex;gap:7px;margin-top:28px;flex-wrap:wrap}
+.tag{font-size:10px;letter-spacing:0.5px;padding:3px 9px;border-radius:3px;border:0.5px solid}
+.hero-r{background:#0a0a0d;padding:32px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.attack-card{background:#111113;border:0.5px solid #1e1e24;border-radius:6px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
+.ac-icon{width:30px;height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ac-title{font-size:12px;font-weight:600;color:#EAEAEA;margin-bottom:2px}
+.ac-desc{font-size:11px;color:#555566;line-height:1.5}
+.ac-badge{font-size:9px;letter-spacing:1px;padding:2px 6px;border-radius:2px;margin-top:5px;display:inline-block}
+
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:0.5px solid #1e1e24}
+.stat-cell{padding:24px 28px;border-right:0.5px solid #1e1e24}
+.stat-cell:last-child{border-right:none}
+.stat-n{font-size:26px;font-weight:700;color:#EAEAEA;letter-spacing:-1px;display:block}
+.stat-n span{color:#4A9EFF;font-size:18px}
+.stat-l{font-size:10px;letter-spacing:1px;color:#444451;margin-top:3px;display:block}
+
+.home-split{display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #1e1e24}
+.hs-panel{padding:44px 36px}
+.hs-panel:first-child{border-right:0.5px solid #1e1e24}
+.method-list{display:flex;flex-direction:column;gap:1px;background:#1e1e24;border-radius:5px;overflow:hidden;margin-top:20px}
+.method-item{background:#111113;padding:11px 14px;display:flex;align-items:center;justify-content:space-between}
+.mi-left{display:flex;align-items:center;gap:8px}
+.mi-dot{width:5px;height:5px;border-radius:50%}
+.mi-name{font-size:12px;color:#EAEAEA}
+.mi-risk{font-size:9px;letter-spacing:0.5px;padding:2px 7px;border-radius:2px}
+.phy-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:20px}
+.phy-card{background:#0d0d10;border:0.5px solid #1e1e24;border-radius:5px;padding:14px}
+.phy-card-top{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.phy-icon{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center}
+.phy-label{font-size:11px;font-weight:600;color:#EAEAEA}
+.phy-desc{font-size:11px;color:#555566;line-height:1.5}
+.phy-accent{height:2px;border-radius:1px;margin-top:10px;width:28px}
+
+.cta-band{padding:48px 36px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #1e1e24}
+.cta-t{font-size:22px;font-weight:700;letter-spacing:-0.5px;color:#EAEAEA;line-height:1.2;margin-bottom:5px}
+.cta-s{font-size:12px;color:#666677}
+
+/* ===================== SOCIAL ENG PAGE ===================== */
+.page-hero{padding:56px 36px 48px;border-bottom:0.5px solid #1e1e24;max-width:600px}
+.page-hero h1{font-size:30px;font-weight:700;letter-spacing:-0.8px;color:#EAEAEA;margin-bottom:12px;line-height:1.2}
+.page-hero p{font-size:13px;color:#666677;line-height:1.7}
+
+.scenarios-full{padding:44px 36px;border-bottom:0.5px solid #1e1e24}
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.sc-card{background:#111113;border:0.5px solid #1e1e24;border-radius:6px;overflow:hidden}
+.sc-top{padding:18px 18px 14px;border-bottom:0.5px solid #1e1e24}
+.sc-label{font-size:9px;letter-spacing:2px;margin-bottom:7px}
+.sc-title{font-size:13px;font-weight:600;color:#EAEAEA;line-height:1.3}
+.sc-body{padding:14px 18px}
+.sc-step{display:flex;align-items:flex-start;gap:7px;margin-bottom:9px}
+.sc-n{font-size:9px;color:#2a2a35;font-weight:700;margin-top:2px;min-width:12px}
+.sc-text{font-size:11px;color:#666677;line-height:1.5}
+.sc-result{display:flex;align-items:center;gap:6px;margin-top:12px;padding-top:10px;border-top:0.5px solid #1e1e24;font-size:10px}
+
+/* ===================== PHYSICAL PAGE ===================== */
+.phy-full-grid{padding:44px 36px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px;border-bottom:0.5px solid #1e1e24}
+.phy-full-card{background:#111113;border:0.5px solid #1e1e24;border-radius:6px;padding:22px}
+.pfc-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.pfc-icon{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.pfc-title{font-size:14px;font-weight:600;color:#EAEAEA}
+.pfc-sub{font-size:11px;color:#555566;margin-bottom:14px;line-height:1.6}
+.pfc-items{display:flex;flex-direction:column;gap:6px}
+.pfc-item{font-size:11px;color:#888896;display:flex;align-items:center;gap:7px}
+.pfc-item::before{content:'';width:4px;height:4px;border-radius:50%;background:#2a2a35;flex-shrink:0}
+
+/* ===================== AI PAGE ===================== */
+.ai-hero{padding:56px 36px 0;border-bottom:0.5px solid #1e1e24}
+.ai-hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:0;padding-bottom:48px}
+.ai-hero-l{padding-right:40px;border-right:0.5px solid #1e1e24}
+.ai-hero-r{padding-left:40px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.ai-badge{display:inline-flex;align-items:center;gap:6px;font-size:9px;letter-spacing:2.5px;color:#4A9EFF;border:0.5px solid #1A3A5C;padding:3px 9px;border-radius:3px;margin-bottom:16px}
+.ai-h1{font-size:28px;font-weight:700;letter-spacing:-0.6px;color:#EAEAEA;line-height:1.2;margin-bottom:12px}
+.ai-intro{font-size:13px;color:#666677;line-height:1.7}
+
+.ai-tool-card{background:#111113;border:0.5px solid #1e1e24;border-radius:6px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.ai-tool-card.featured{border-color:#1A3A5C}
+.atc-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.atc-title{font-size:12px;font-weight:600;color:#EAEAEA;margin-bottom:3px}
+.atc-desc{font-size:11px;color:#555566;line-height:1.5}
+.atc-tag{font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:2px;margin-top:6px;display:inline-block}
+
+.ai-uses{padding:44px 36px;border-bottom:0.5px solid #1e1e24}
+.ai-uses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1e1e24;border:0.5px solid #1e1e24;border-radius:6px;overflow:hidden;margin-top:24px}
+.aiu-card{background:#111113;padding:22px 20px}
+.aiu-n{font-size:10px;font-weight:700;color:#2a2a35;margin-bottom:10px;letter-spacing:1px}
+.aiu-title{font-size:13px;font-weight:600;color:#EAEAEA;margin-bottom:7px}
+.aiu-desc{font-size:11px;color:#666677;line-height:1.6}
+.aiu-before{margin-top:12px;padding-top:10px;border-top:0.5px solid #1e1e24}
+.aiu-row{display:flex;justify-content:space-between;font-size:10px;margin-bottom:5px;align-items:center}
+.aiu-label{color:#444451}
+.aiu-val-old{color:#555566;text-decoration:line-through}
+.aiu-val-new{color:#00E5A0;font-weight:600}
+
+.ai-ethics{padding:36px;background:#0a0a0d;border-bottom:0.5px solid #1e1e24;display:flex;gap:14px;align-items:flex-start}
+.ae-icon{width:36px;height:36px;border-radius:6px;background:#0d1a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.ae-title{font-size:13px;font-weight:600;color:#EAEAEA;margin-bottom:6px}
+.ae-text{font-size:12px;color:#666677;line-height:1.7}
+
+/* FOOTER */
+.foot{padding:28px 36px;display:flex;align-items:center;justify-content:space-between;background:#111113;border-top:0.5px solid #1e1e24}
+.foot-logo{font-size:13px;font-weight:700;color:#2a2a35;letter-spacing:-0.2px}
+.foot-logo span{color:#1A6FD4}
+.foot-links{display:flex;gap:18px}
+.foot-links a{font-size:11px;color:#333344;text-decoration:none;cursor:pointer}
+.foot-copy{font-size:11px;color:#222230}
+</style>
+
+<div class="site">
+
+<nav class="nav">
+  <div class="nav-logo" onclick="showPage('home')">
+    <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
+      <path d="M9 0L18 4v9C18 18 14 21 9 22 4 21 0 18 0 13V4L9 0z" fill="#1e1e24" stroke="#2a2a35" stroke-width="0.7"/>
+      <path d="M9 3L16 6.5v6.5C16 17 13 20 9 21 5 20 2 17 2 13V6.5L9 3z" fill="#141416"/>
+      <rect x="6" y="13" width="6" height="5" rx="1.3" fill="#4A9EFF"/>
+      <circle cx="9" cy="15.5" r="1.1" fill="#141416"/>
+      <path d="M6.8 13v-2.5C6.8 8.8 7.7 8 9 8s2.2.8 2.2 2.5V13" fill="none" stroke="#4A9EFF" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="nav-wordmark">RIC<span>SEC</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><button onclick="showPage('home')" id="nav-home" class="active">Inicio</button></li>
+    <li><button onclick="showPage('social')" id="nav-social">Ingeniería social</button></li>
+    <li><button onclick="showPage('physical')" id="nav-physical">Pentesting físico</button></li>
+    <li><button onclick="showPage('ai')" id="nav-ai">IA en RicSec</button></li>
+  </ul>
+  <button class="nav-cta" onclick="showPage('social')">Solicitar evaluación</button>
+</nav>
+
+<!-- ============ HOME ============ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-l">
+      <div class="hero-eyebrow"><span class="hero-dot"></span>SEGURIDAD OFENSIVA · MADRID</div>
+      <h1 class="hero-h1">Tu mayor<br>vulnerabilidad<br>es <em>humana</em></h1>
+      <p class="hero-sub">Simulamos los mismos ataques que usan los adversarios reales — desde clonar una tarjeta NFC hasta suplantar a un técnico de IT. Sin trampa, sin guión.</p>
+      <div class="hero-btns">
+        <button class="btn-p" onclick="showPage('social')">Ver servicios</button>
+        <button class="btn-s" onclick="showPage('ai')">IA en nuestro trabajo</button>
+      </div>
+      <div class="hero-tags">
+        <span class="tag" style="color:#4A9EFF;border-color:#1A3A5C;background:#0a1520">NFC cloning</span>
+        <span class="tag" style="color:#4A9EFF;border-color:#1A3A5C;background:#0a1520">RFID bypass</span>
+        <span class="tag" style="color:#00E5A0;border-color:#0a2a1a;background:#060f0a">Phishing</span>
+        <span class="tag" style="color:#00E5A0;border-color:#0a2a1a;background:#060f0a">Smishing</span>
+        <span class="tag" style="color:#00E5A0;border-color:#0a2a1a;background:#060f0a">Vishing</span>
+        <span class="tag" style="color:#888896;border-color:#2a2a35;background:#111113">Wi-Fi attacks</span>
+        <span class="tag" style="color:#888896;border-color:#2a2a35;background:#111113">Evil Twin</span>
+      </div>
+    </div>
+    <div class="hero-r">
+      <div class="attack-card">
+        <div class="ac-icon" style="background:#1f0a0a"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="5.5" width="12" height="8" rx="1.5" stroke="#FF4D4D" stroke-width="0.9"/><path d="M4.5 5.5V4a3 3 0 016 0v1.5" stroke="#FF4D4D" stroke-width="0.9" stroke-linecap="round"/><circle cx="7.5" cy="9.5" r="1.2" fill="#FF4D4D"/></svg></div>
+        <div><div class="ac-title">Control de accesos físicos</div><div class="ac-desc">Clonación RFID/NFC, tailgating, bypass de tornos y cerraduras.</div><span class="ac-badge" style="background:#1f0a0a;color:#FF4D4D">FÍSICO</span></div>
+      </div>
+      <div class="attack-card">
+        <div class="ac-icon" style="background:#0a1a0a"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1.5C4 1.5 1 4 1 7.5" stroke="#00E5A0" stroke-width="0.9" stroke-linecap="round"/><path d="M7.5 1.5C11 1.5 14 4 14 7.5" stroke="#00E5A0" stroke-width="0.9" stroke-linecap="round"/><path d="M7.5 4.5C5.8 4.5 4.5 5.8 4.5 7.5" stroke="#00E5A0" stroke-width="0.7" stroke-linecap="round"/><path d="M7.5 4.5C9.2 4.5 10.5 5.8 10.5 7.5" stroke="#00E5A0" stroke-width="0.7" stroke-linecap="round"/><circle cx="7.5" cy="10.5" r="1.5" fill="#00E5A0"/></svg></div>
+        <div><div class="ac-title">Wi-Fi attacks</div><div class="ac-desc">Evil Twin, captive portals, deauth y captura de handshakes.</div><span class="ac-badge" style="background:#0a1a0a;color:#00E5A0">WIRELESS</span></div>
+      </div>
+      <div class="attack-card">
+        <div class="ac-icon" style="background:#0d1a2a"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="2.5" y="2" width="10" height="11" rx="1.5" stroke="#4A9EFF" stroke-width="0.9"/><path d="M5 6h5M5 8.5h3.5" stroke="#4A9EFF" stroke-width="0.7" stroke-linecap="round"/></svg></div>
+        <div><div class="ac-title">Phishing dirigido</div><div class="ac-desc">Spear phishing, páginas clonadas y bypass de MFA.</div><span class="ac-badge" style="background:#0d1a2a;color:#4A9EFF">EMAIL</span></div>
+      </div>
+      <div class="attack-card">
+        <div class="ac-icon" style="background:#0a1a0a"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="3" width="12" height="9" rx="1.5" stroke="#00E5A0" stroke-width="0.9"/><path d="M1.5 6.5h12" stroke="#00E5A0" stroke-width="0.7"/><circle cx="4.5" cy="4.8" r="0.8" fill="#00E5A0"/><circle cx="6.8" cy="4.8" r="0.8" fill="#00E5A0"/></svg></div>
+        <div><div class="ac-title">Smishing & Vishing</div><div class="ac-desc">SMS fraudulentos y llamadas suplantando soporte o banca.</div><span class="ac-badge" style="background:#0a1a0a;color:#00E5A0">VOICE · SMS</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat-cell"><span class="stat-n">91<span>%</span></span><span class="stat-l">BRECHAS EMPIEZAN CON PHISHING</span></div>
+    <div class="stat-cell"><span class="stat-n">68<span>%</span></span><span class="stat-l">EMPLEADOS ABREN EMAILS DE ATAQUE</span></div>
+    <div class="stat-cell"><span class="stat-n">7<span>s</span></span><span class="stat-l">PARA CLONAR UNA TARJETA NFC</span></div>
+    <div class="stat-cell"><span class="stat-n">100<span>%</span></span><span class="stat-l">DE RED TEAMS CONSIGUEN ENTRAR</span></div>
+  </div>
+
+  <div class="home-split">
+    <div class="hs-panel">
+      <p class="section-tag">INGENIERÍA SOCIAL</p>
+      <h2 class="section-title">El ataque más<br>efectivo no<br>necesita código</h2>
+      <div class="method-list">
+        <div class="method-item"><div class="mi-left"><div class="mi-dot" style="background:#4A9EFF"></div><span class="mi-name">Spear phishing con pretexting</span></div><span class="mi-risk" style="background:#0d1a2a;color:#4A9EFF">Email</span></div>
+        <div class="method-item"><div class="mi-left"><div class="mi-dot" style="background:#4A9EFF"></div><span class="mi-name">Páginas de login clonadas</span></div><span class="mi-risk" style="background:#0d1a2a;color:#4A9EFF">Email</span></div>
+        <div class="method-item"><div class="mi-left"><div class="mi-dot" style="background:#00E5A0"></div><span class="mi-name">Smishing — alertas falsas</span></div><span class="mi-risk" style="background:#0a1a0a;color:#00E5A0">SMS</span></div>
+        <div class="method-item"><div class="mi-left"><div class="mi-dot" style="background:#00E5A0"></div><span class="mi-name">Vishing — soporte técnico falso</span></div><span class="mi-risk" style="background:#0a1a0a;color:#00E5A0">Voz</span></div>
+        <div class="method-item"><div class="mi-left"><div class="mi-dot" style="background:#FF4D4D"></div><span class="mi-name">CEO fraud / BEC</span></div><span class="mi-risk" style="background:#1f0a0a;color:#FF4D4D">Alto</span></div>
+      </div>
+      <div style="margin-top:16px"><button class="btn-p" style="font-size:11px;padding:8px 16px" onclick="showPage('social')">Ver todos los vectores →</button></div>
+    </div>
+    <div class="hs-panel">
+      <p class="section-tag">PENTESTING FÍSICO</p>
+      <h2 class="section-title">Entramos donde<br>se supone que<br>no deberíamos</h2>
+      <div class="phy-grid">
+        <div class="phy-card"><div class="phy-card-top"><div class="phy-icon" style="background:#0d1a2a"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="5" width="10" height="7" rx="1.3" stroke="#4A9EFF" stroke-width="0.8"/><path d="M4 5V3.5a2.5 2.5 0 015 0V5" stroke="#4A9EFF" stroke-width="0.8" stroke-linecap="round"/></svg></div><span class="phy-label">RFID/NFC</span></div><p class="phy-desc">Clonación de tarjetas de acceso en segundos.</p><div class="phy-accent" style="background:#4A9EFF"></div></div>
+        <div class="phy-card"><div class="phy-card-top"><div class="phy-icon" style="background:#0a1a0a"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1C3.5 1 1 3.5 1 6.5" stroke="#00E5A0" stroke-width="0.8" stroke-linecap="round"/><path d="M6.5 1C9.5 1 12 3.5 12 6.5" stroke="#00E5A0" stroke-width="0.8" stroke-linecap="round"/><circle cx="6.5" cy="9.5" r="1.2" fill="#00E5A0"/></svg></div><span class="phy-label">Wi-Fi</span></div><p class="phy-desc">Evil Twin y captura de credenciales.</p><div class="phy-accent" style="background:#00E5A0"></div></div>
+        <div class="phy-card"><div class="phy-card-top"><div class="phy-icon" style="background:#1a1a0a"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 5h9v6a1 1 0 01-1 1H3a1 1 0 01-1-1V5z" stroke="#EF9F27" stroke-width="0.8"/><path d="M4 5V3.5a2.5 2.5 0 015 0V5" stroke="#EF9F27" stroke-width="0.8" stroke-linecap="round"/></svg></div><span class="phy-label">Tailgating</span></div><p class="phy-desc">Acceso físico sin credenciales.</p><div class="phy-accent" style="background:#EF9F27"></div></div>
+        <div class="phy-card"><div class="phy-card-top"><div class="phy-icon" style="background:#1f0a0a"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="4.5" r="2.5" stroke="#FF4D4D" stroke-width="0.8"/><path d="M2 11c0-2.5 2-4.5 4.5-4.5S11 8.5 11 11" stroke="#FF4D4D" stroke-width="0.8" stroke-linecap="round"/></svg></div><span class="phy-label">Suplantación</span></div><p class="phy-desc">Impersonar técnicos y personal.</p><div class="phy-accent" style="background:#FF4D4D"></div></div>
+      </div>
+      <div style="margin-top:16px"><button class="btn-s" style="font-size:11px;padding:8px 16px" onclick="showPage('physical')">Ver pentesting físico →</button></div>
+    </div>
+  </div>
+
+  <!-- AI teaser on home -->
+  <div style="padding:36px;background:#0a0a0d;border-bottom:0.5px solid #1e1e24;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <div style="width:40px;height:40px;border-radius:8px;background:#0d1a2a;border:0.5px solid #1A3A5C;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#4A9EFF" stroke-width="0.9"/><path d="M6 9h6M9 6v6" stroke="#4A9EFF" stroke-width="0.9" stroke-linecap="round"/><circle cx="9" cy="9" r="2" fill="#4A9EFF" opacity="0.3"/></svg>
+      </div>
+      <div>
+        <div style="font-size:10px;letter-spacing:2px;color:#444451;margin-bottom:6px">DIFERENCIADOR</div>
+        <div style="font-size:15px;font-weight:600;color:#EAEAEA;margin-bottom:4px">Usamos IA en cada operación</div>
+        <div style="font-size:12px;color:#666677;max-width:480px">Desde la generación de pretextos hasta el análisis de resultados — la IA amplifica lo que hacemos, no lo reemplaza.</div>
+      </div>
+    </div>
+    <button class="btn-p" style="font-size:11px;padding:8px 16px;white-space:nowrap" onclick="showPage('ai')">Cómo lo usamos →</button>
+  </div>
+
+  <section class="cta-band">
+    <div><h2 class="cta-t">¿Cuánto tardaríamos<br>en entrar a tu empresa?</h2><p class="cta-s">Primera evaluación sin coste. Respuesta en 24h.</p></div>
+    <div style="display:flex;gap:10px"><button class="btn-s" onclick="showPage('physical')">Ver metodología</button><button class="btn-p">Contactar ahora</button></div>
+  </section>
+
+  <footer class="foot"><span class="foot-logo">RIC<span>SEC</span></span><div class="foot-links"><a>Responsible disclosure</a><a>Privacidad</a><a>Términos</a></div><span class="foot-copy">© 2026 RicSec · Madrid</span></footer>
+</div>
+
+<!-- ============ SOCIAL ENG ============ -->
+<div class="page" id="page-social">
+  <div class="page-hero">
+    <p class="section-tag">INGENIERÍA SOCIAL</p>
+    <h1>El factor humano<br>es el perímetro<br>que nadie audita</h1>
+    <p style="margin-top:12px">Diseñamos y ejecutamos campañas de ataque dirigidas a personas — no a sistemas. Medimos la resistencia real de tu organización ante manipulación psicológica, urgencia fabricada y suplantación de identidad.</p>
+  </div>
+
+  <div class="scenarios-full">
+    <p class="section-tag">VECTORES DE ATAQUE</p>
+    <h2 class="section-title">Cómo ejecutamos los ataques</h2>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-top"><p class="sc-label" style="color:#4A9EFF">PHISHING</p><h3 class="sc-title">Robo de credenciales vía email dirigido</h3></div>
+        <div class="sc-body">
+          <div class="sc-step"><span class="sc-n">01</span><span class="sc-text">OSINT: LinkedIn, web corporativa, estructura de emails.</span></div>
+          <div class="sc-step"><span class="sc-n">02</span><span class="sc-text">Dominio lookalike + página de login clonada (Office 365, Google).</span></div>
+          <div class="sc-step"><span class="sc-n">03</span><span class="sc-text">Email con pretexto urgente y firma de CEO o RRHH.</span></div>
+          <div class="sc-step"><span class="sc-n">04</span><span class="sc-text">Captura de credenciales + cookie de sesión (bypass MFA).</span></div>
+          <div class="sc-result"><div style="width:5px;height:5px;border-radius:50%;background:#FF4D4D;flex-shrink:0"></div><span style="color:#666677">Tasa de éxito: <strong style="color:#FF4D4D">63% media</strong></span></div>
+        </div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-top"><p class="sc-label" style="color:#00E5A0">SMISHING + VISHING</p><h3 class="sc-title">Fraude combinado SMS y llamada</h3></div>
+        <div class="sc-body">
+          <div class="sc-step"><span class="sc-n">01</span><span class="sc-text">SMS urgente suplantando banco o servicio con enlace malicioso.</span></div>
+          <div class="sc-step"><span class="sc-n">02</span><span class="sc-text">Víctima introduce datos en web fraudulenta.</span></div>
+          <div class="sc-step"><span class="sc-n">03</span><span class="sc-text">Llamada inmediata "de verificación" para obtener OTP en tiempo real.</span></div>
+          <div class="sc-step"><span class="sc-n">04</span><span class="sc-text">Acceso completo a cuenta sin disparar alertas.</span></div>
+          <div class="sc-result"><div style="width:5px;height:5px;border-radius:50%;background:#EF9F27;flex-shrink:0"></div><span style="color:#666677">Duración total: <strong style="color:#EF9F27">8 minutos</strong></span></div>
+        </div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-top"><p class="sc-label" style="color:#888896">CEO FRAUD / BEC</p><h3 class="sc-title">Suplantación interna para transferencia</h3></div>
+        <div class="sc-body">
+          <div class="sc-step"><span class="sc-n">01</span><span class="sc-text">Reconocimiento de jerarquía, proveedores y ciclos de pago.</span></div>
+          <div class="sc-step"><span class="sc-n">02</span><span class="sc-text">Email desde dominio idéntico suplantando al CEO o CFO.</span></div>
+          <div class="sc-step"><span class="sc-n">03</span><span class="sc-text">Solicitud urgente de transferencia o cambio de datos bancarios.</span></div>
+          <div class="sc-step"><span class="sc-n">04</span><span class="sc-text">Medimos si el empleado ejecuta, escala o detecta el fraude.</span></div>
+          <div class="sc-result"><div style="width:5px;height:5px;border-radius:50%;background:#FF4D4D;flex-shrink:0"></div><span style="color:#666677">Vector más costoso: <strong style="color:#FF4D4D">avg. 130k€ por incidente</strong></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="cta-band" style="border-top:0.5px solid #1e1e24">
+    <div><h2 class="cta-t">¿Cuántos de tus empleados<br>caerían hoy?</h2><p class="cta-s">Campaña de simulación con informe detallado por persona y departamento.</p></div>
+    <div style="display:flex;gap:10px"><button class="btn-p">Solicitar simulación</button></div>
+  </section>
+  <footer class="foot"><span class="foot-logo">RIC<span>SEC</span></span><div class="foot-links"><a>Responsible disclosure</a><a>Privacidad</a><a>Términos</a></div><span class="foot-copy">© 2026 RicSec · Madrid</span></footer>
+</div>
+
+<!-- ============ PHYSICAL ============ -->
+<div class="page" id="page-physical">
+  <div class="page-hero">
+    <p class="section-tag">PENTESTING FÍSICO</p>
+    <h1>Entramos donde se<br>supone que no<br>deberíamos poder</h1>
+    <p style="margin-top:12px">Evaluamos la seguridad física de tus instalaciones usando exactamente las mismas técnicas que emplearía un atacante real: sin previo aviso al personal, con escenarios acordados de antemano con dirección.</p>
+  </div>
+
+  <div class="phy-full-grid">
+    <div class="phy-full-card">
+      <div class="pfc-head"><div class="pfc-icon" style="background:#0d1a2a"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="6.5" width="12" height="8" rx="1.5" stroke="#4A9EFF" stroke-width="0.9"/><path d="M5 6.5V5a3 3 0 016 0v1.5" stroke="#4A9EFF" stroke-width="0.9" stroke-linecap="round"/><circle cx="8" cy="10.5" r="1.2" fill="#4A9EFF"/></svg></div><span class="pfc-title">RFID / NFC cloning</span></div>
+      <p class="pfc-sub">Capturamos la señal de tarjetas de acceso corporativas con hardware portátil y las clonamos en segundos — sin contacto visible con el objetivo.</p>
+      <div class="pfc-items">
+        <div class="pfc-item">Lectores de largo alcance ocultos en mochilas</div>
+        <div class="pfc-item">Clonación de Mifare Classic, DESFire, HID</div>
+        <div class="pfc-item">Bypass de tornos y puertas de seguridad</div>
+        <div class="pfc-item">Acceso a zonas de alta seguridad (CPD, dirección)</div>
+      </div>
+    </div>
+    <div class="phy-full-card">
+      <div class="pfc-head"><div class="pfc-icon" style="background:#0a1a0a"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C4.5 1.5 2 4.5 2 8" stroke="#00E5A0" stroke-width="0.9" stroke-linecap="round"/><path d="M8 1.5C11.5 1.5 14 4.5 14 8" stroke="#00E5A0" stroke-width="0.9" stroke-linecap="round"/><path d="M8 5C6 5 4.5 6.5 4.5 8" stroke="#00E5A0" stroke-width="0.7" stroke-linecap="round"/><path d="M8 5C10 5 11.5 6.5 11.5 8" stroke="#00E5A0" stroke-width="0.7" stroke-linecap="round"/><circle cx="8" cy="11.5" r="1.5" fill="#00E5A0"/></svg></div><span class="pfc-title">Wi-Fi attacks</span></div>
+      <p class="pfc-sub">Desplegamos puntos de acceso falsos que imitan la red corporativa para capturar credenciales y tráfico sensible en tiempo real.</p>
+      <div class="pfc-items">
+        <div class="pfc-item">Evil Twin con SSID corporativo clonado</div>
+        <div class="pfc-item">Captive portal fraudulento de autenticación</div>
+        <div class="pfc-item">Deauth attacks para forzar reconexión</div>
+        <div class="pfc-item">Captura de handshakes WPA2 para cracking offline</div>
+      </div>
+    </div>
+    <div class="phy-full-card">
+      <div class="pfc-head"><div class="pfc-icon" style="background:#1a1a0a"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="3" stroke="#EF9F27" stroke-width="0.9"/><path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="#EF9F27" stroke-width="0.9" stroke-linecap="round"/></svg></div><span class="pfc-title">Tailgating & impersonación</span></div>
+      <p class="pfc-sub">Accedemos a zonas restringidas aprovechando comportamientos humanos predecibles — amabilidad, urgencia o distracción.</p>
+      <div class="pfc-items">
+        <div class="pfc-item">Entrada tras empleado sin identificarse</div>
+        <div class="pfc-item">Suplantación de técnicos de mantenimiento</div>
+        <div class="pfc-item">Entrega de paquetes urgentes como pretexto</div>
+        <div class="pfc-item">Acceso a impresoras, puestos desbloqueados</div>
+      </div>
+    </div>
+    <div class="phy-full-card">
+      <div class="pfc-head"><div class="pfc-icon" style="background:#1f0a0a"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1.5" stroke="#FF4D4D" stroke-width="0.9"/><path d="M5.5 5V3.5a2.5 2.5 0 015 0V5" stroke="#FF4D4D" stroke-width="0.9" stroke-linecap="round"/><path d="M6 9h4" stroke="#FF4D4D" stroke-width="0.7" stroke-linecap="round"/></svg></div><span class="pfc-title">USB drops & dispositivos</span></div>
+      <p class="pfc-sub">Dejamos dispositivos trampa en zonas comunes para medir si los empleados los conectan a equipos corporativos.</p>
+      <div class="pfc-items">
+        <div class="pfc-item">USBs con payloads de simulación</div>
+        <div class="pfc-item">Dispositivos de red implantados (Raspberry Pi)</div>
+        <div class="pfc-item">Keyloggers en hardware de teclado</div>
+        <div class="pfc-item">Cargadores maliciosos en zonas públicas</div>
+      </div>
+    </div>
+  </div>
+
+  <section class="cta-band" style="border-top:0.5px solid #1e1e24">
+    <div><h2 class="cta-t">¿Saben tus empleados<br>reconocer a un atacante?</h2><p class="cta-s">Red team físico completo con informe fotográfico y de evidencias.</p></div>
+    <div style="display:flex;gap:10px"><button class="btn-p">Solicitar red team</button></div>
+  </section>
+  <footer class="foot"><span class="foot-logo">RIC<span>SEC</span></span><div class="foot-links"><a>Responsible disclosure</a><a>Privacidad</a><a>Términos</a></div><span class="foot-copy">© 2026 RicSec · Madrid</span></footer>
+</div>
+
+<!-- ============ AI PAGE ============ -->
+<div class="page" id="page-ai">
+  <div class="ai-hero">
+    <div class="ai-hero-inner">
+      <div class="ai-hero-l">
+        <div class="ai-badge"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="3" stroke="#4A9EFF" stroke-width="0.8"/><circle cx="4" cy="4" r="1.2" fill="#4A9EFF"/></svg>MÉTODO · IA</div>
+        <h1 class="ai-h1">Usamos IA.<br>No para hacer<br>el trabajo —<br>para hacerlo mejor.</h1>
+        <p class="ai-intro">La inteligencia artificial no reemplaza al analista. Lo hace más peligroso. En RicSec integramos IA en cada fase de la operación — desde la fase de reconocimiento hasta la redacción del informe final.</p>
+        <p class="ai-intro" style="margin-top:10px">Somos de los pocos equipos en España que documentan y miden cómo la IA mejora sus resultados ofensivos. Eso nos da una ventaja real — y a ti también.</p>
+      </div>
+      <div class="ai-hero-r">
+        <div class="ai-tool-card featured">
+          <div class="atc-icon" style="background:#0d1a2a"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6" stroke="#4A9EFF" stroke-width="0.8"/><path d="M5 7.5h5M7.5 5v5" stroke="#4A9EFF" stroke-width="0.8" stroke-linecap="round"/></svg></div>
+          <div><div class="atc-title">Generación de pretextos</div><div class="atc-desc">LLMs entrenados para crear emails, SMS y guiones de llamada hiperrealistas adaptados al objetivo.</div><span class="atc-tag" style="background:#0d1a2a;color:#4A9EFF">Social eng.</span></div>
+        </div>
+        <div class="ai-tool-card">
+          <div class="atc-icon" style="background:#0a1a0a"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="5" r="2.5" stroke="#00E5A0" stroke-width="0.8"/><path d="M3 13c0-2.5 2-4.5 4.5-4.5S12 10.5 12 13" stroke="#00E5A0" stroke-width="0.8" stroke-linecap="round"/></svg></div>
+          <div><div class="atc-title">OSINT automatizado</div><div class="atc-desc">Pipelines de IA que agregan y correlacionan datos de LinkedIn, registros públicos y redes sociales en minutos.</div><span class="atc-tag" style="background:#0a1a0a;color:#00E5A0">Reconocimiento</span></div>
+        </div>
+        <div class="ai-tool-card">
+          <div class="atc-icon" style="background:#1a1a0a"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="2" y="3" width="11" height="9" rx="1.3" stroke="#EF9F27" stroke-width="0.8"/><path d="M5 7h5M5 9.5h3" stroke="#EF9F27" stroke-width="0.7" stroke-linecap="round"/></svg></div>
+          <div><div class="atc-title">Redacción de informes</div><div class="atc-desc">Análisis automático de hallazgos, clasificación de riesgo y generación de informe ejecutivo y técnico.</div><span class="atc-tag" style="background:#1a1a0a;color:#EF9F27">Reporting</span></div>
+        </div>
+        <div class="ai-tool-card">
+          <div class="atc-icon" style="background:#1f0a0a"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 2L13 5v5c0 3-2.5 5-5.5 5.5C5 15 2 13 2 10V5L7.5 2z" stroke="#FF4D4D" stroke-width="0.8"/></svg></div>
+          <div><div class="atc-title">Análisis de superficie de ataque</div><div class="atc-desc">Modelos que priorizan vectores de entrada por probabilidad de éxito antes de iniciar la operación.</div><span class="atc-tag" style="background:#1f0a0a;color:#FF4D4D">Planificación</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-uses">
+    <p class="section-tag">IMPACTO REAL</p>
+    <h2 class="section-title">Qué mejora con IA en cada fase</h2>
+    <div class="ai-uses-grid">
+      <div class="aiu-card">
+        <div class="aiu-n">FASE 01 — RECONOCIMIENTO</div>
+        <div class="aiu-title">OSINT que tardaría días, en horas</div>
+        <p class="aiu-desc">Automatizamos la correlación de datos públicos — emails, perfiles, organigramas, filtraciones — y construimos un mapa del objetivo antes de lanzar el primer vector.</p>
+        <div class="aiu-before">
+          <div class="aiu-row"><span class="aiu-label">Tiempo de reconocimiento</span><span style="display:flex;gap:8px"><span class="aiu-val-old">3–5 días</span><span class="aiu-val-new">4–6h</span></span></div>
+          <div class="aiu-row"><span class="aiu-label">Fuentes analizadas</span><span style="display:flex;gap:8px"><span class="aiu-val-old">~20</span><span class="aiu-val-new">200+</span></span></div>
+        </div>
+      </div>
+      <div class="aiu-card">
+        <div class="aiu-n">FASE 02 — ATAQUE</div>
+        <div class="aiu-title">Pretextos que la víctima no detecta</div>
+        <p class="aiu-desc">Generamos emails, SMS y guiones de vishing personalizados para cada objetivo — con el tono, vocabulario y contexto exacto de su empresa. Sin patrones genéricos.</p>
+        <div class="aiu-before">
+          <div class="aiu-row"><span class="aiu-label">Tasa de apertura email</span><span style="display:flex;gap:8px"><span class="aiu-val-old">31%</span><span class="aiu-val-new">74%</span></span></div>
+          <div class="aiu-row"><span class="aiu-label">Tasa de clic en enlace</span><span style="display:flex;gap:8px"><span class="aiu-val-old">18%</span><span class="aiu-val-new">52%</span></span></div>
+        </div>
+      </div>
+      <div class="aiu-card">
+        <div class="aiu-n">FASE 03 — INFORME</div>
+        <div class="aiu-title">Reportes que dirección entiende</div>
+        <p class="aiu-desc">La IA clasifica hallazgos, estima impacto de negocio y genera un informe ejecutivo legible junto al técnico detallado — sin sacrificar profundidad.</p>
+        <div class="aiu-before">
+          <div class="aiu-row"><span class="aiu-label">Tiempo de redacción</span><span style="display:flex;gap:8px"><span class="aiu-val-old">2–3 días</span><span class="aiu-val-new">4h</span></span></div>
+          <div class="aiu-row"><span class="aiu-label">Formatos de salida</span><span style="display:flex;gap:8px"><span class="aiu-val-old">1</span><span class="aiu-val-new">Ejecutivo + técnico</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-ethics">
+    <div class="ae-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L14 4.5v5C14 13 11.5 15 8 15.5 4.5 15 2 13 2 9.5v-5L8 1.5z" stroke="#4A9EFF" stroke-width="0.9"/><path d="M5.5 8l2 2 3-3" stroke="#4A9EFF" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div>
+      <div class="ae-title">IA responsable y en contexto ético</div>
+      <p class="ae-text">Toda operación se ejecuta bajo contrato firmado con alcance definido. La IA que usamos no genera contenido ilegal ni es accesible fuera del entorno controlado de cada proyecto. Nuestros modelos no se entrenan con datos de clientes. Lo que construimos para ti, se queda en ti.</p>
+    </div>
+  </div>
+
+  <section class="cta-band" style="border-top:0.5px solid #1e1e24">
+    <div><h2 class="cta-t">¿Quieres ver cómo<br>lo aplicamos en tu caso?</h2><p class="cta-s">Demo de reconocimiento OSINT con IA sobre tu empresa — sin coste.</p></div>
+    <div style="display:flex;gap:10px"><button class="btn-s">Ver metodología completa</button><button class="btn-p">Solicitar demo</button></div>
+  </section>
+  <footer class="foot"><span class="foot-logo">RIC<span>SEC</span></span><div class="foot-links"><a>Responsible disclosure</a><a>Privacidad</a><a>Términos</a></div><span class="foot-copy">© 2026 RicSec · Madrid</span></footer>
+</div>
+
+</div>
+
+<script>
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  var btn=document.getElementById('nav-'+id);
+  if(btn)btn.classList.add('active');
+  document.querySelector('.site').scrollTop=0;
+}
+</script>
