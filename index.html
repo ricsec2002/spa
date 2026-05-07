@@ -1,132 +1,134 @@
-<!-- RICSEC - HOME OPTIMIZADA PARA CONVERSIÓN -->
+<div class="site">
 
-<style>
-body{margin:0;font-family:Helvetica,Arial,sans-serif;background:#0d0d10;color:#eaeaea}
-.wrap{max-width:1100px;margin:auto}
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <span class="nav-wordmark">RIC<span>SEC</span></span>
+  </div>
 
-/* NAV */
-.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 28px;border-bottom:1px solid #1e1e24;position:sticky;top:0;background:#111113}
-.logo{font-weight:700;letter-spacing:-0.5px}
-.logo span{color:#4A9EFF}
-.btn{padding:10px 16px;border-radius:6px;border:none;cursor:pointer;font-weight:600}
-.btn-primary{background:#4A9EFF;color:white}
-.btn-ghost{background:transparent;border:1px solid #2a2a35;color:#aaa}
+  <ul class="nav-links">
+    <li><button class="active">Inicio</button></li>
+    <li><button>Servicios</button></li>
+    <li><button>Enfoque</button></li>
+    <li><button>Contacto</button></li>
+  </ul>
 
-/* HERO */
-.hero{padding:80px 28px 40px;border-bottom:1px solid #1e1e24}
-.hero h1{font-size:44px;line-height:1.1;margin:0 0 16px}
-.hero h1 span{color:#4A9EFF}
-.hero p{color:#777;font-size:15px;max-width:650px;line-height:1.6}
-.cta-row{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
-.badge{display:inline-block;font-size:11px;color:#4A9EFF;border:1px solid #1A3A5C;padding:4px 10px;border-radius:20px;margin-bottom:14px}
-
-/* PROBLEM */
-.section{padding:60px 28px;border-bottom:1px solid #1e1e24}
-.h2{font-size:22px;margin-bottom:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
-.card{background:#111113;border:1px solid #1e1e24;padding:18px;border-radius:8px}
-.card h3{font-size:14px;margin:0 0 8px}
-.card p{font-size:13px;color:#777;line-height:1.5}
-
-/* SERVICE */
-.highlight{border:1px solid #1A3A5C;background:#0f1520}
-.price{color:#00E5A0;font-weight:700}
-
-/* STEPS */
-.steps{display:flex;flex-direction:column;gap:10px}
-.step{display:flex;gap:10px;font-size:13px;color:#777}
-.step b{color:#eaeaea}
-.dot{width:6px;height:6px;background:#4A9EFF;border-radius:50%;margin-top:6px}
-
-/* CTA */
-.cta{padding:60px 28px;text-align:center}
-.cta h2{font-size:26px}
-
-.footer{padding:30px;text-align:center;color:#444;border-top:1px solid #1e1e24}
-</style>
-
-<div class="nav">
-  <div class="logo">RIC<span>SEC</span></div>
-  <button class="btn btn-primary">Solicitar simulación</button>
-</div>
-
-<div class="wrap">
+  <button class="nav-cta">Solicitar evaluación</button>
+</nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="badge">INGENIERÍA SOCIAL · SIMULACIÓN DE ATAQUES REALES</div>
-  <h1>El 90% de los ataques<br>empiezan con una <span>persona</span></h1>
-  <p>Simulamos cómo un atacante real entraría en tu empresa usando ingeniería social, fraude digital y manipulación humana. Sin vulnerar sistemas. Solo personas.</p>
-  <div class="cta-row">
-    <button class="btn btn-primary">Ver cómo te atacaríamos</button>
-    <button class="btn btn-ghost">Cómo funciona</button>
+  <div class="hero-l">
+    <p class="hero-eyebrow">CONSULTORÍA EN SEGURIDAD OFENSIVA · MADRID</p>
+
+    <h1 class="hero-h1">
+      Evaluamos cómo podrían comprometer tu empresa antes de que ocurra
+    </h1>
+
+    <p class="hero-sub">
+      En RicSec ayudamos a empresas a entender sus riesgos reales mediante evaluaciones controladas de ingeniería social, seguridad física y procesos humanos.
+    </p>
+
+    <div class="hero-btns">
+      <button class="btn-p">Ver servicios</button>
+      <button class="btn-s">Cómo trabajamos</button>
+    </div>
+
+    <div class="hero-tags">
+      <span class="tag">Ingeniería social</span>
+      <span class="tag">Seguridad física</span>
+      <span class="tag">Concienciación</span>
+      <span class="tag">Auditorías IA</span>
+    </div>
+  </div>
+
+  <div class="hero-r">
+    <div class="attack-card">
+      <div class="ac-title">Evaluaciones de ingeniería social</div>
+      <div class="ac-desc">
+        Simulaciones controladas para medir la exposición real a phishing, fraude y suplantación.
+      </div>
+    </div>
+
+    <div class="attack-card">
+      <div class="ac-title">Revisión de seguridad física</div>
+      <div class="ac-desc">
+        Evaluación de accesos, controles y procedimientos en oficinas e instalaciones.
+      </div>
+    </div>
+
+    <div class="attack-card">
+      <div class="ac-title">Auditorías de adopción de IA</div>
+      <div class="ac-desc">
+        Análisis de riesgos asociados al uso de herramientas de inteligencia artificial en la empresa.
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- PROBLEM -->
-<section class="section">
-  <div class="h2">Tu empresa ya es un objetivo</div>
-  <div class="grid">
-    <div class="card">
-      <h3>📧 Phishing diario</h3>
-      <p>Tus empleados reciben ataques constantemente. Uno solo es suficiente.</p>
-    </div>
-    <div class="card">
-      <h3>🧠 Error humano</h3>
-      <p>La presión, urgencia y confianza siguen siendo el mayor vector de ataque.</p>
-    </div>
-    <div class="card">
-      <h3>💸 Impacto real</h3>
-      <p>Un solo fraude puede costar entre 5.000€ y 250.000€ en una pyme.</p>
-    </div>
-  </div>
-</section>
+<!-- VALUE -->
+<section class="home-split">
 
-<!-- SERVICE -->
-<section class="section">
-  <div class="h2">Evaluación de Riesgo Humano (72h)</div>
-  <div class="card highlight">
-    <p><b>Qué hacemos:</b> simulamos ataques reales para medir cómo reaccionan tus empleados.</p>
-    <p class="price">Desde 300€ – 900€</p>
-    <div class="steps">
-      <div class="step"><div class="dot"></div><b>1.</b> Análisis de exposición digital (LinkedIn, emails, roles)</div>
-      <div class="step"><div class="dot"></div><b>2.</b> Simulación controlada de phishing o fraude</div>
-      <div class="step"><div class="dot"></div><b>3.</b> Medición de respuestas reales</div>
-      <div class="step"><div class="dot"></div><b>4.</b> Informe ejecutivo + plan de mejora</div>
-    </div>
-  </div>
-</section>
+  <div class="hs-panel">
+    <p class="section-tag">ENFOQUE</p>
+    <h2 class="section-title">
+      Seguridad centrada en personas y procesos
+    </h2>
 
-<!-- DIFFERENTIATION -->
-<section class="section">
-  <div class="h2">Por qué RicSec</div>
-  <div class="grid">
-    <div class="card">
-      <h3>⚡ Ataques realistas</h3>
-      <p>No simulaciones genéricas. Usamos escenarios reales adaptados a tu empresa.</p>
-    </div>
-    <div class="card">
-      <h3>🤖 IA aplicada</h3>
-      <p>Aceleramos reconocimiento y personalización de ataques mediante IA.</p>
-    </div>
-    <div class="card">
-      <h3>📊 Informe ejecutivo</h3>
-      <p>Resultados claros para dirección, no solo informes técnicos.</p>
+    <p class="hero-sub">
+      La mayoría de incidentes no ocurren por fallos técnicos, sino por decisiones humanas bajo presión o falta de formación.
+      Nuestro trabajo es medir ese riesgo de forma realista y accionable.
+    </p>
+
+    <div class="method-list">
+      <div class="method-item">Ingeniería social controlada</div>
+      <div class="method-item">Evaluación de accesos físicos</div>
+      <div class="method-item">Simulaciones de fraude empresarial</div>
+      <div class="method-item">Revisión de procesos internos</div>
     </div>
   </div>
+
+  <div class="hs-panel">
+    <p class="section-tag">SERVICIOS</p>
+    <h2 class="section-title">
+      Evaluaciones prácticas, no teóricas
+    </h2>
+
+    <p class="hero-sub">
+      Entregamos informes claros para dirección y equipos técnicos con hallazgos priorizados por impacto real en negocio.
+    </p>
+
+    <div class="method-list">
+      <div class="method-item">Informe ejecutivo para dirección</div>
+      <div class="method-item">Informe técnico detallado</div>
+      <div class="method-item">Recomendaciones priorizadas</div>
+      <div class="method-item">Plan de mejora opcional</div>
+    </div>
+  </div>
+
 </section>
 
 <!-- CTA -->
-<section class="cta">
-  <h2>¿Quieres ver cómo entraríamos en tu empresa?</h2>
-  <p style="color:#777">Recibes una evaluación inicial sin compromiso en 24h.</p>
-  <div class="cta-row" style="justify-content:center">
-    <button class="btn btn-primary">Solicitar simulación</button>
+<section class="cta-band">
+  <div>
+    <h2 class="cta-t">¿Quieres conocer tu nivel real de exposición?</h2>
+    <p class="cta-s">Realizamos una primera evaluación inicial sin compromiso.</p>
   </div>
+
+  <button class="btn-p">Solicitar contacto</button>
 </section>
 
-<div class="footer">
-  RicSec · Seguridad clara para empresas modernas
-</div>
+<!-- FOOTER -->
+<footer class="foot">
+  <span class="foot-logo">RIC<span>SEC</span></span>
+
+  <div class="foot-links">
+    <a>Servicios</a>
+    <a>Privacidad</a>
+    <a>Contacto</a>
+  </div>
+
+  <span class="foot-copy">© 2026 RicSec · Madrid</span>
+</footer>
 
 </div>
