@@ -1,134 +1,183 @@
-<div class="site">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RicSec | Seguridad Ofensiva y Evaluación de Riesgos Humanos</title>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-logo">
-    <span class="nav-wordmark">RIC<span>SEC</span></span>
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0d0d10;
+  color:#eaeaea;
+  scroll-behavior:smooth;
+}
+
+.container{max-width:1000px;margin:auto;padding:40px 20px}
+
+/* NAV */
+nav{
+  position:sticky;top:0;
+  background:#111113;
+  display:flex;
+  justify-content:space-between;
+  padding:15px 30px;
+  border-bottom:1px solid #1e1e24;
+}
+nav a{color:#aaa;text-decoration:none;margin-left:15px;font-size:14px}
+nav a:hover{color:#fff}
+
+/* HERO */
+.hero{
+  padding:80px 20px;
+  text-align:left;
+}
+.hero h1{
+  font-size:38px;
+  line-height:1.2;
+}
+.hero p{color:#999;max-width:600px}
+
+/* SECTIONS */
+section{padding:60px 0;border-top:1px solid #1e1e24}
+
+h2{font-size:24px;margin-bottom:20px}
+
+.card{
+  background:#111113;
+  border:1px solid #1e1e24;
+  padding:20px;
+  margin-bottom:15px;
+  border-radius:6px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+}
+
+/* FORM */
+form{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  max-width:500px;
+}
+
+input, textarea{
+  padding:12px;
+  background:#0d0d10;
+  border:1px solid #2a2a35;
+  color:#fff;
+  border-radius:5px;
+}
+
+button{
+  padding:12px;
+  background:#4A9EFF;
+  border:none;
+  color:white;
+  cursor:pointer;
+  border-radius:5px;
+  font-weight:bold;
+}
+
+button:hover{background:#2f7fe0}
+
+footer{
+  padding:30px;
+  text-align:center;
+  border-top:1px solid #1e1e24;
+  color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div><strong>RICSEC</strong></div>
+  <div>
+    <a href="#servicios">Servicios</a>
+    <a href="#metodo">Método</a>
+    <a href="#contacto">Contacto</a>
   </div>
-
-  <ul class="nav-links">
-    <li><button class="active">Inicio</button></li>
-    <li><button>Servicios</button></li>
-    <li><button>Enfoque</button></li>
-    <li><button>Contacto</button></li>
-  </ul>
-
-  <button class="nav-cta">Solicitar evaluación</button>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-l">
-    <p class="hero-eyebrow">CONSULTORÍA EN SEGURIDAD OFENSIVA · MADRID</p>
+<div class="hero container">
+  <h1>Evaluamos cómo un atacante puede comprometer tu empresa antes de que ocurra</h1>
+  <p>
+    Ayudamos a empresas a detectar riesgos reales en personas, procesos y accesos físicos mediante evaluaciones controladas y éticas de seguridad ofensiva.
+  </p>
+</div>
 
-    <h1 class="hero-h1">
-      Evaluamos cómo podrían comprometer tu empresa antes de que ocurra
-    </h1>
-
-    <p class="hero-sub">
-      En RicSec ayudamos a empresas a entender sus riesgos reales mediante evaluaciones controladas de ingeniería social, seguridad física y procesos humanos.
-    </p>
-
-    <div class="hero-btns">
-      <button class="btn-p">Ver servicios</button>
-      <button class="btn-s">Cómo trabajamos</button>
-    </div>
-
-    <div class="hero-tags">
-      <span class="tag">Ingeniería social</span>
-      <span class="tag">Seguridad física</span>
-      <span class="tag">Concienciación</span>
-      <span class="tag">Auditorías IA</span>
-    </div>
+<!-- PROBLEMA -->
+<section class="container">
+  <h2>El problema real no es técnico</h2>
+  <div class="card">
+    La mayoría de incidentes de seguridad no ocurren por fallos en sistemas, sino por decisiones humanas bajo presión: phishing, fraude, suplantación o accesos indebidos.
   </div>
+</section>
 
-  <div class="hero-r">
-    <div class="attack-card">
-      <div class="ac-title">Evaluaciones de ingeniería social</div>
-      <div class="ac-desc">
-        Simulaciones controladas para medir la exposición real a phishing, fraude y suplantación.
-      </div>
+<!-- SERVICIOS -->
+<section id="servicios" class="container">
+  <h2>Servicios</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Ingeniería social controlada</h3>
+      <p>Simulaciones de phishing, smishing y vishing para medir exposición real.</p>
     </div>
 
-    <div class="attack-card">
-      <div class="ac-title">Revisión de seguridad física</div>
-      <div class="ac-desc">
-        Evaluación de accesos, controles y procedimientos en oficinas e instalaciones.
-      </div>
+    <div class="card">
+      <h3>Seguridad física</h3>
+      <p>Evaluación de accesos, controles y vulnerabilidades en oficinas e instalaciones.</p>
     </div>
 
-    <div class="attack-card">
-      <div class="ac-title">Auditorías de adopción de IA</div>
-      <div class="ac-desc">
-        Análisis de riesgos asociados al uso de herramientas de inteligencia artificial en la empresa.
-      </div>
+    <div class="card">
+      <h3>Auditoría de IA</h3>
+      <p>Análisis de riesgos derivados del uso de herramientas de inteligencia artificial en la empresa.</p>
+    </div>
+
+    <div class="card">
+      <h3>Formación en seguridad</h3>
+      <p>Concienciación para empleados y directivos sobre fraude digital y riesgos reales.</p>
     </div>
   </div>
 </section>
 
-<!-- VALUE -->
-<section class="home-split">
+<!-- METODO -->
+<section id="metodo" class="container">
+  <h2>Cómo trabajamos</h2>
 
-  <div class="hs-panel">
-    <p class="section-tag">ENFOQUE</p>
-    <h2 class="section-title">
-      Seguridad centrada en personas y procesos
-    </h2>
-
-    <p class="hero-sub">
-      La mayoría de incidentes no ocurren por fallos técnicos, sino por decisiones humanas bajo presión o falta de formación.
-      Nuestro trabajo es medir ese riesgo de forma realista y accionable.
-    </p>
-
-    <div class="method-list">
-      <div class="method-item">Ingeniería social controlada</div>
-      <div class="method-item">Evaluación de accesos físicos</div>
-      <div class="method-item">Simulaciones de fraude empresarial</div>
-      <div class="method-item">Revisión de procesos internos</div>
-    </div>
-  </div>
-
-  <div class="hs-panel">
-    <p class="section-tag">SERVICIOS</p>
-    <h2 class="section-title">
-      Evaluaciones prácticas, no teóricas
-    </h2>
-
-    <p class="hero-sub">
-      Entregamos informes claros para dirección y equipos técnicos con hallazgos priorizados por impacto real en negocio.
-    </p>
-
-    <div class="method-list">
-      <div class="method-item">Informe ejecutivo para dirección</div>
-      <div class="method-item">Informe técnico detallado</div>
-      <div class="method-item">Recomendaciones priorizadas</div>
-      <div class="method-item">Plan de mejora opcional</div>
-    </div>
-  </div>
-
+  <div class="card">1. Análisis del entorno y objetivos</div>
+  <div class="card">2. Diseño de evaluación controlada</div>
+  <div class="card">3. Ejecución autorizada</div>
+  <div class="card">4. Informe ejecutivo + técnico</div>
+  <div class="card">5. Recomendaciones accionables</div>
 </section>
 
-<!-- CTA -->
-<section class="cta-band">
-  <div>
-    <h2 class="cta-t">¿Quieres conocer tu nivel real de exposición?</h2>
-    <p class="cta-s">Realizamos una primera evaluación inicial sin compromiso.</p>
-  </div>
+<!-- CONTACTO -->
+<section id="contacto" class="container">
+  <h2>Contacto</h2>
+  <p>Solicita una evaluación inicial sin compromiso.</p>
 
-  <button class="btn-p">Solicitar contacto</button>
+  <form action="https://formspree.io/f/xjvexample" method="POST">
+    <input type="text" name="nombre" placeholder="Nombre" required>
+    <input type="email" name="email" placeholder="Email corporativo" required>
+    <input type="text" name="empresa" placeholder="Empresa">
+    <textarea name="mensaje" rows="5" placeholder="¿Qué quieres evaluar?"></textarea>
+    <button type="submit">Solicitar evaluación</button>
+  </form>
 </section>
 
-<!-- FOOTER -->
-<footer class="foot">
-  <span class="foot-logo">RIC<span>SEC</span></span>
-
-  <div class="foot-links">
-    <a>Servicios</a>
-    <a>Privacidad</a>
-    <a>Contacto</a>
-  </div>
-
-  <span class="foot-copy">© 2026 RicSec · Madrid</span>
+<footer>
+  © 2026 RicSec · Seguridad ofensiva en Madrid
 </footer>
 
-</div>
+</body>
+</html>
