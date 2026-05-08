@@ -3,793 +3,237 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RicSec — Auditoría de Seguridad Ofensiva</title>
-<meta name="description" content="Consultora especializada en ingeniería social autorizada, auditorías de seguridad física y formación en ciberseguridad para empresas.">
-
-<style>
-/* ============================================================
-   VARIABLES & RESET
-   ============================================================ */
-:root {
-  --bg-base:       #0a0c0f;
-  --bg-surface:    #0f1217;
-  --bg-card:       #141820;
-  --bg-card-hover: #181f2b;
-  --border:        rgba(255,255,255,0.07);
-  --border-active: rgba(99,179,237,0.35);
-
-  --text-primary:  #eef0f4;
-  --text-secondary:#8a95a3;
-  --text-muted:    #4e5968;
-
-  --accent:        #3b82f6;
-  --accent-bright: #60a5fa;
-  --accent-glow:   rgba(59,130,246,0.18);
-
-  --success:       #22c55e;
-  --error:         #ef4444;
-
-  --radius-sm:     6px;
-  --radius-md:     12px;
-  --radius-lg:     20px;
-
-  --font-display:  'Georgia', 'Times New Roman', serif;
-  --font-body:     'Helvetica Neue', 'Arial', sans-serif;
-  --font-mono:     'Courier New', monospace;
-
-  --transition:    0.22s cubic-bezier(0.4,0,0.2,1);
-  --shadow-card:   0 4px 24px rgba(0,0,0,0.45);
-  --shadow-glow:   0 0 40px rgba(59,130,246,0.12);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; font-size: 16px; }
-
-body {
-  background: var(--bg-base);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  line-height: 1.65;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ============================================================
-   NOISE TEXTURE OVERLAY
-   ============================================================ */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.4;
-}
-
-/* ============================================================
-   TYPOGRAPHY SCALE
-   ============================================================ */
-h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; line-height: 1.18; }
-h1 { font-size: clamp(2.4rem, 5vw, 4.2rem); }
-h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); }
-h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
-h4 { font-size: 1rem; letter-spacing: 0.08em; text-transform: uppercase; font-family: var(--font-body); font-weight: 600; }
-p  { color: var(--text-secondary); font-size: 1.025rem; max-width: 62ch; }
-
-a { color: var(--accent-bright); text-decoration: none; transition: color var(--transition); }
-a:hover { color: #fff; }
-
-/* ============================================================
-   LAYOUT UTILITIES
-   ============================================================ */
-.container { width: 100%; max-width: 1160px; margin-inline: auto; padding-inline: clamp(1.25rem, 5vw, 3rem); }
-.section   { padding-block: clamp(5rem, 10vw, 9rem); }
-.grid-2    { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-.grid-3    { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-.grid-4    { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
-.flex-center { display: flex; align-items: center; justify-content: center; }
-.text-center { text-align: center; }
-.label { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-bright); background: var(--accent-glow); border: 1px solid var(--border-active); border-radius: 4px; padding: 0.3em 0.8em; display: inline-block; margin-bottom: 1.4rem; }
-
-/* ============================================================
-   BUTTONS
-   ============================================================ */
-.btn {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  padding: 0.82rem 1.8rem; border-radius: var(--radius-sm);
-  font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
-  letter-spacing: 0.02em; cursor: pointer; border: none;
-  transition: all var(--transition); white-space: nowrap;
-  text-decoration: none;
-}
-.btn-primary {
-  background: var(--accent); color: #fff;
-  box-shadow: 0 2px 20px rgba(59,130,246,0.35);
-}
-.btn-primary:hover {
-  background: #2563eb; transform: translateY(-1px);
-  box-shadow: 0 6px 28px rgba(59,130,246,0.45); color: #fff;
-}
-.btn-ghost {
-  background: transparent; color: var(--text-primary);
-  border: 1px solid var(--border);
-}
-.btn-ghost:hover { border-color: var(--border-active); background: var(--bg-card); color: #fff; }
-.btn-sm { padding: 0.6rem 1.3rem; font-size: 0.83rem; }
-.btn-icon { width: 18px; height: 18px; }
-
-/* ============================================================
-   NAV
-   ============================================================ */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 0 clamp(1.25rem, 5vw, 3rem);
-  height: 68px; display: flex; align-items: center; justify-content: space-between;
-  transition: background var(--transition), border-color var(--transition);
-  border-bottom: 1px solid transparent;
-}
-nav.scrolled { background: rgba(10,12,15,0.92); backdrop-filter: blur(16px); border-color: var(--border); }
-.nav-logo {
-  display: flex; align-items: center; gap: 0.7rem;
-  font-family: var(--font-display); font-size: 1.45rem;
-  color: var(--text-primary); font-weight: 400; letter-spacing: -0.03em;
-}
-.nav-logo-icon {
-  width: 32px; height: 32px; border-radius: 7px;
-  background: var(--accent); display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: #fff;
-}
-.nav-links { display: flex; align-items: center; gap: 2.2rem; }
-.nav-links a { font-size: 0.875rem; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.01em; }
-.nav-links a:hover { color: var(--text-primary); }
-.nav-cta { margin-left: 1rem; }
-.nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
-.nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: all var(--transition); }
-.mobile-menu {
-  display: none; position: fixed; top: 68px; left: 0; right: 0;
-  background: rgba(10,12,15,0.97); backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border); z-index: 99; padding: 1.5rem 2rem;
-  flex-direction: column; gap: 1.2rem;
-}
-.mobile-menu a { font-size: 1rem; color: var(--text-secondary); font-weight: 500; }
-.mobile-menu.open { display: flex; }
-
-/* ============================================================
-   HERO
-   ============================================================ */
-#inicio {
-  min-height: 100svh; display: flex; align-items: center;
-  padding-top: 68px; position: relative; overflow: hidden;
-}
-.hero-grid-bg {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
-}
-.hero-glow {
-  position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
-  width: 80vw; height: 60vh;
-  background: radial-gradient(ellipse, rgba(59,130,246,0.09) 0%, transparent 65%);
-  pointer-events: none;
-}
-.hero-content { position: relative; z-index: 1; max-width: 820px; }
-.hero-eyebrow {
-  font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.25em;
-  text-transform: uppercase; color: var(--accent-bright); margin-bottom: 1.5rem;
-  display: flex; align-items: center; gap: 0.8rem;
-}
-.hero-eyebrow::before {
-  content: ''; display: block; width: 32px; height: 1px; background: var(--accent-bright);
-}
-.hero-title { margin-bottom: 1.6rem; }
-.hero-title em { font-style: italic; color: var(--accent-bright); }
-.hero-subtitle { font-size: clamp(1.05rem, 2vw, 1.2rem); color: var(--text-secondary); margin-bottom: 2.8rem; max-width: 56ch; }
-.hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 4rem; }
-.hero-stats { display: flex; flex-wrap: wrap; gap: 2.5rem; }
-.hero-stat {}
-.hero-stat-value { font-family: var(--font-display); font-size: 2.2rem; color: var(--text-primary); letter-spacing: -0.04em; }
-.hero-stat-label { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 0.2rem; }
-.hero-divider { width: 1px; height: 40px; background: var(--border); align-self: center; }
-
-/* ============================================================
-   PROBLEM / RIESGO
-   ============================================================ */
-#problema { background: var(--bg-surface); }
-.problema-intro { margin-bottom: 3.5rem; }
-.problema-intro h2 { margin-bottom: 1rem; }
-.problema-intro p { font-size: 1.1rem; }
-.risk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
-.risk-item {
-  background: var(--bg-card); padding: 2rem 1.75rem;
-  transition: background var(--transition);
-}
-.risk-item:hover { background: var(--bg-card-hover); }
-.risk-icon { font-size: 1.6rem; margin-bottom: 1rem; line-height: 1; }
-.risk-item h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.6rem; letter-spacing: 0; }
-.risk-item p { font-size: 0.88rem; max-width: none; }
-.problema-cta { margin-top: 3rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-.problema-cta p { color: var(--text-secondary); font-size: 0.95rem; max-width: none; }
-
-/* ============================================================
-   SERVICIOS
-   ============================================================ */
-#servicios {}
-.services-header { text-align: center; margin-bottom: 3.5rem; }
-.services-header p { margin-inline: auto; }
-.service-card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius-md); padding: 2rem 1.75rem;
-  transition: all var(--transition); cursor: default;
-  position: relative; overflow: hidden;
-}
-.service-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), transparent);
-  opacity: 0; transition: opacity var(--transition);
-}
-.service-card:hover { border-color: var(--border-active); background: var(--bg-card-hover); box-shadow: var(--shadow-card); transform: translateY(-2px); }
-.service-card:hover::before { opacity: 1; }
-.service-number { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.15em; margin-bottom: 1.2rem; }
-.service-icon { font-size: 1.75rem; margin-bottom: 1.1rem; line-height: 1; }
-.service-card h3 { font-family: var(--font-body); font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.7rem; letter-spacing: -0.01em; }
-.service-card p { font-size: 0.875rem; max-width: none; line-height: 1.7; }
-.service-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.3rem; }
-.service-tag {
-  font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--text-muted); background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border); border-radius: 4px; padding: 0.25em 0.6em;
-}
-.service-cta-row { text-align: center; margin-top: 3.2rem; }
-
-/* ============================================================
-   METODOLOGÍA
-   ============================================================ */
-#metodologia { background: var(--bg-surface); }
-.method-header { margin-bottom: 3.5rem; }
-.method-steps { position: relative; }
-.method-steps::before {
-  content: ''; position: absolute; left: 20px; top: 32px; bottom: 32px;
-  width: 1px; background: linear-gradient(to bottom, var(--accent), transparent);
-}
-.method-step {
-  display: grid; grid-template-columns: 60px 1fr; gap: 1.5rem;
-  padding: 1.75rem 0; border-bottom: 1px solid var(--border);
-}
-.method-step:last-child { border-bottom: none; }
-.step-marker {
-  display: flex; align-items: flex-start; justify-content: center;
-  padding-top: 4px;
-}
-.step-num {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: var(--bg-card); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-bright);
-  position: relative; z-index: 1; flex-shrink: 0;
-  transition: all var(--transition);
-}
-.method-step:hover .step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
-.step-content h3 { font-family: var(--font-body); font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
-.step-content p { font-size: 0.88rem; max-width: none; }
-.step-badge { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-bright); margin-bottom: 0.4rem; font-family: var(--font-mono); }
-
-/* ============================================================
-   DIFERENCIADOR / IA
-   ============================================================ */
-#diferenciador {}
-.diferenciador-inner {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
-}
-.diferenciador-text h2 { margin-bottom: 1.2rem; }
-.diferenciador-text p { margin-bottom: 1.4rem; }
-.ia-features { list-style: none; margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
-.ia-feature { display: flex; gap: 0.9rem; align-items: flex-start; }
-.ia-feature-dot { width: 20px; height: 20px; border-radius: 50%; background: var(--accent-glow); border: 1px solid var(--border-active); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-.ia-feature-dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-bright); display: block; }
-.ia-feature span { font-size: 0.9rem; color: var(--text-secondary); }
-.ia-visual {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 2.2rem; position: relative; overflow: hidden;
-}
-.ia-visual::before {
-  content: ''; position: absolute; top: -50%; right: -50%;
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(59,130,246,0.1), transparent 65%);
-  pointer-events: none;
-}
-.ia-terminal {
-  background: var(--bg-base); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 1.2rem 1.4rem; font-family: var(--font-mono);
-  font-size: 0.78rem; color: var(--text-secondary); line-height: 1.9;
-}
-.ia-terminal .t-green { color: var(--success); }
-.ia-terminal .t-blue  { color: var(--accent-bright); }
-.ia-terminal .t-muted { color: var(--text-muted); }
-.ia-terminal .t-white { color: var(--text-primary); }
-.ia-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; }
-.ia-metric {
-  background: var(--bg-base); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 1rem;
-}
-.ia-metric-val { font-family: var(--font-display); font-size: 1.7rem; color: var(--text-primary); letter-spacing: -0.04em; }
-.ia-metric-lbl { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; }
-
-/* ============================================================
-   SOBRE RICSEC
-   ============================================================ */
-#empresa { background: var(--bg-surface); }
-.empresa-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-.empresa-text h2 { margin-bottom: 1.4rem; }
-.empresa-text p { margin-bottom: 1.1rem; }
-.empresa-text p:last-of-type { margin-bottom: 0; }
-.empresa-pillars { display: flex; flex-direction: column; gap: 1rem; }
-.pillar {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 1.3rem 1.5rem;
-  display: flex; align-items: flex-start; gap: 1rem;
-  transition: all var(--transition);
-}
-.pillar:hover { border-color: var(--border-active); }
-.pillar-icon { font-size: 1.2rem; flex-shrink: 0; }
-.pillar h4 { font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.2rem; letter-spacing: 0; text-transform: none; font-weight: 600; }
-.pillar p { font-size: 0.8rem; max-width: none; margin: 0; }
-
-/* ============================================================
-   CONTACTO
-   ============================================================ */
-#contacto {}
-.contacto-inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start; }
-.contacto-info h2 { margin-bottom: 1.2rem; }
-.contacto-info p { margin-bottom: 2.2rem; }
-.contact-reasons { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 2.4rem; }
-.contact-reason { display: flex; align-items: center; gap: 0.8rem; font-size: 0.88rem; color: var(--text-secondary); }
-.contact-reason::before { content: '→'; color: var(--accent-bright); font-family: var(--font-mono); flex-shrink: 0; }
-.contact-direct { border-top: 1px solid var(--border); padding-top: 1.5rem; }
-.contact-direct p { font-size: 0.82rem; color: var(--text-muted); max-width: none; margin-bottom: 0.4rem; }
-.contact-direct a { color: var(--accent-bright); font-size: 0.95rem; font-weight: 500; }
-
-/* Form */
-.contact-form {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 2.4rem;
-}
-.form-group { margin-bottom: 1.3rem; }
-.form-group label {
-  display: block; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em;
-  text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;
-}
-.form-group input, .form-group textarea, .form-group select {
-  width: 100%; background: var(--bg-base); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 0.82rem 1rem;
-  color: var(--text-primary); font-family: var(--font-body); font-size: 0.9rem;
-  transition: border-color var(--transition), box-shadow var(--transition);
-  outline: none; appearance: none; -webkit-appearance: none;
-}
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-  border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow);
-}
-.form-group input::placeholder, .form-group textarea::placeholder { color: var(--text-muted); }
-.form-group textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
-.form-group select option { background: var(--bg-card); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.form-submit { width: 100%; padding: 1rem; font-size: 0.95rem; margin-top: 0.4rem; justify-content: center; }
-.form-legal { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 1rem; line-height: 1.5; }
-.form-message {
-  display: none; padding: 0.9rem 1.1rem; border-radius: var(--radius-sm);
-  font-size: 0.85rem; margin-top: 1rem;
-}
-.form-message.success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; }
-.form-message.error   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.3);  color: #f87171; }
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-footer {
-  background: var(--bg-surface); border-top: 1px solid var(--border);
-  padding-block: 2.8rem;
-}
-.footer-inner {
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;
-}
-.footer-logo { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-secondary); letter-spacing: -0.02em; }
-.footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
-.footer-links a { font-size: 0.82rem; color: var(--text-muted); transition: color var(--transition); }
-.footer-links a:hover { color: var(--text-secondary); }
-.footer-legal { font-size: 0.78rem; color: var(--text-muted); width: 100%; text-align: center; border-top: 1px solid var(--border); padding-top: 1.8rem; margin-top: 0.4rem; }
-
-/* ============================================================
-   DIVIDER / ACCENT LINES
-   ============================================================ */
-.section-divider { width: 40px; height: 2px; background: var(--accent); margin-bottom: 1.6rem; }
-.section-divider-center { margin-inline: auto; }
-
-/* ============================================================
-   SCROLL REVEAL
-   ============================================================ */
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-.reveal.visible { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 900px) {
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .diferenciador-inner,
-  .empresa-inner,
-  .contacto-inner { grid-template-columns: 1fr; gap: 3rem; }
-  .ia-visual { order: -1; }
-  .nav-links, .nav-cta { display: none; }
-  .nav-hamburger { display: flex; }
-}
-@media (max-width: 600px) {
-  .grid-2, .grid-4 { grid-template-columns: 1fr; }
-  .hero-stats { gap: 1.5rem; }
-  .hero-divider { display: none; }
-  .form-row { grid-template-columns: 1fr; }
-  .contact-form { padding: 1.75rem; }
-  .method-steps::before { display: none; }
-  .footer-inner { flex-direction: column; align-items: flex-start; }
-}
-</style>
+<meta name="description" content="RicSec — Consultoría de ciberseguridad especializada en ingeniería social, pentesting físico y auditorías de riesgo humano para empresas B2B.">
+<meta name="robots" content="index, follow">
+<title>RicSec — Seguridad que empieza por las personas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<!-- ============================================================
-     NAVEGACIÓN
-     ============================================================ -->
-<nav id="navbar">
-  <a href="#inicio" class="nav-logo" aria-label="RicSec inicio">
-    <div class="nav-logo-icon">RS</div>
-    RicSec
-  </a>
-
-  <div class="nav-links">
-    <a href="#servicios">Servicios</a>
-    <a href="#metodologia">Metodología</a>
-    <a href="#diferenciador">IA aplicada</a>
-    <a href="#empresa">Empresa</a>
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="#" class="logo">Ric<span>Sec</span></a>
+    <nav class="nav__links" id="navLinks">
+      <a href="#servicios">Servicios</a>
+      <a href="#metodologia">Metodología</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto" class="btn-nav">Hablar con un experto</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+</header>
 
-  <a href="#contacto" class="btn btn-primary btn-sm nav-cta">Solicitar evaluación</a>
-
-  <div class="nav-hamburger" id="hamburger" aria-label="Menú" role="button" tabindex="0">
-    <span></span><span></span><span></span>
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero__bg"></div>
+  <div class="container hero__inner">
+    <div class="hero__label reveal">Consultoría de ciberseguridad B2B</div>
+    <h1 class="hero__title reveal">La mayor vulnerabilidad<br>de su empresa<em> son las personas.</em></h1>
+    <p class="hero__sub reveal">Evaluamos, simulamos y formamos para reducir el riesgo humano en organizaciones que no pueden permitirse un incidente.</p>
+    <div class="hero__actions reveal">
+      <a href="#contacto" class="btn-primary">Solicitar auditoría</a>
+      <a href="#servicios" class="btn-ghost">Ver servicios</a>
+    </div>
+    <div class="hero__stats reveal">
+      <div class="stat"><span class="stat__n">91%</span><span class="stat__l">de brechas empiezan por error humano</span></div>
+      <div class="stat__div"></div>
+      <div class="stat"><span class="stat__n">+200</span><span class="stat__l">simulaciones ejecutadas en España y Europa</span></div>
+      <div class="stat__div"></div>
+      <div class="stat"><span class="stat__n">72h</span><span class="stat__l">tiempo medio de entrega del informe ejecutivo</span></div>
+    </div>
   </div>
-</nav>
+</section>
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#servicios"      onclick="closeMobile()">Servicios</a>
-  <a href="#metodologia"    onclick="closeMobile()">Metodología</a>
-  <a href="#diferenciador"  onclick="closeMobile()">IA aplicada</a>
-  <a href="#empresa"        onclick="closeMobile()">Empresa</a>
-  <a href="#contacto" class="btn btn-primary btn-sm" style="text-align:center;" onclick="closeMobile()">Solicitar evaluación</a>
-</div>
-
-
-<!-- ============================================================
-     HERO
-     ============================================================ -->
-<section id="inicio">
-  <div class="hero-grid-bg" aria-hidden="true"></div>
-  <div class="hero-glow" aria-hidden="true"></div>
-
+<!-- PROBLEMA -->
+<section class="problema" id="problema">
   <div class="container">
-    <div class="hero-content">
-      <div class="hero-eyebrow reveal">Auditoría de seguridad ofensiva autorizada</div>
-
-      <h1 class="hero-title reveal reveal-delay-1">
-        Reducimos el riesgo de ataque humano<br>
-<em>antes de que ocurra una brecha,</em><br>
-en su organización.
-      </h1>
-
-      <p class="hero-subtitle reveal reveal-delay-2">
-        Auditorías de ingeniería social, seguridad física y uso de IA bajo entorno controlado y autorizado, con informe ejecutivo y plan de mitigación priorizado.
-      </p>
-
-      <div class="hero-actions reveal reveal-delay-3">
-        <a href="#contacto" class="btn btn-primary">
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-         Solicitar evaluación de riesgo
-        </a>
-        <a href="#servicios" class="btn btn-ghost">Ver servicios</a>
+    <div class="section-label reveal">El problema real</div>
+    <div class="problema__grid">
+      <div class="problema__copy reveal">
+        <h2>Su empresa invierte en tecnología. El atacante llama por teléfono.</h2>
+        <p>Los firewalls no protegen contra un empleado que entrega sus credenciales a quien llama como el soporte técnico. La mayoría de los incidentes de seguridad no explotan código — explotan confianza.</p>
+        <p>El vector de ataque más barato y efectivo del mundo no requiere habilidades técnicas. Requiere psicología.</p>
       </div>
-
-      <div class="hero-stats reveal reveal-delay-4">
-        <div class="hero-stat">
-          <div class="hero-stat-value">80%</div>
-<div class="hero-stat-label">de incidentes comienzan con<br>factor humano</div>
+      <div class="problema__cards reveal">
+        <div class="risk-card">
+          <div class="risk-card__ico">01</div>
+          <h4>Ingeniería social no detectada</h4>
+          <p>Empleados que no reconocen manipulación psicológica en llamadas, correos o visitas físicas.</p>
         </div>
-        <div class="hero-divider" aria-hidden="true"></div>
-        <div class="hero-stat">
-          <div class="hero-stat-value">24–72h</div>
-<div class="hero-stat-label">tiempo medio de detección<br>en entornos corporativos</div>
+        <div class="risk-card">
+          <div class="risk-card__ico">02</div>
+          <h4>Accesos físicos no controlados</h4>
+          <p>Instalaciones con controles de acceso insuficientes que permiten a actores no autorizados acceder a sistemas críticos.</p>
         </div>
-        <div class="hero-divider" aria-hidden="true"></div>
-        <div class="hero-stat">
-          <div class="hero-stat-value">60%</div>
-<div class="hero-stat-label">de empresas sin simulaciones<br>internas de seguridad</div>
+        <div class="risk-card">
+          <div class="risk-card__ico">03</div>
+          <h4>IA sin política de uso</h4>
+          <p>Equipos que usan herramientas de IA sin protocolos, filtrando información sensible sin ser conscientes de ello.</p>
+        </div>
+        <div class="risk-card">
+          <div class="risk-card__ico">04</div>
+          <h4>Formación desactualizada</h4>
+          <p>Planes de concienciación que no reflejan las técnicas actuales de ataque y generan una falsa sensación de seguridad.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-
-<!-- ============================================================
-     PROBLEMA / RIESGO
-     ============================================================ -->
-<section id="problema" class="section">
+<!-- SERVICIOS -->
+<section class="servicios" id="servicios">
   <div class="container">
-    <div class="problema-intro reveal">
-      <div class="label">El problema real</div>
-      <h2>Los ataques más costosos<br>no explotan código.<br>Explotan confianza.</h2>
-      <p>La inversión en tecnología de seguridad no sirve de nada si un empleado entrega sus credenciales por teléfono, un técnico externo accede a zonas restringidas sin autorización, o alguien filtra información sensible a través de un asistente de IA mal configurado.</p>
-       <p style="margin-top:1.2rem;">
-En la mayoría de organizaciones, los controles técnicos están maduros. El riesgo real se encuentra en los procesos humanos y operativos.
-</p>
-    </div>
-
-    <div class="risk-grid reveal">
-      <div class="risk-item">
-        <div class="risk-icon">📧</div>
-        <h3>Phishing y spear-phishing</h3>
-        <p>El 74% de las organizaciones sufrieron al menos un intento exitoso de phishing el año pasado. Los atacantes perfeccionan cada campaña con datos reales de LinkedIn y redes sociales.</p>
-      </div>
-      <div class="risk-item">
-        <div class="risk-icon">📞</div>
-        <h3>Vishing corporativo</h3>
-        <p>Llamadas haciéndose pasar por soporte técnico, proveedores o dirección. El empleado cede accesos creyendo actuar correctamente. Sin rastro técnico.</p>
-      </div>
-      <div class="risk-item">
-        <div class="risk-icon">🏢</div>
-        <h3>Acceso físico no autorizado</h3>
-        <p>Tailgating, ingeniería social presencial, USB drops. Una persona con aspecto de técnico puede acceder a infraestructura crítica sin necesidad de vulnerar ningún sistema.</p>
-      </div>
-      <div class="risk-item">
-        <div class="risk-icon">🤖</div>
-        <h3>Exposición por IA generativa</h3>
-        <p>El uso no supervisado de herramientas de IA por parte del equipo puede filtrar contratos, datos de clientes o propiedad intelectual a sistemas externos.</p>
-      </div>
-    </div>
-
-    <div class="problema-cta reveal">
-      <p>¿Sabe realmente cómo respondería su equipo ante estas situaciones?</p>
-      <a href="#contacto" class="btn btn-primary btn-sm">Evaluemos juntos →</a>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     SERVICIOS
-     ============================================================ -->
-<section id="servicios" class="section">
-  <div class="container">
-    <div class="services-header reveal">
-      <div class="label">Servicios</div>
-      <div class="section-divider section-divider-center"></div>
-      <h2>Servicios de auditoría<br>y concienciación</h2>
-      <p>Evaluaciones reales, en entornos reales, con autorización expresa. Cada servicio genera un informe ejecutivo y técnico con plan de remediación priorizado.</p>
-    </div>
-
-    <div class="grid-4">
-      <!-- Ingeniería social -->
-      <div class="service-card reveal reveal-delay-1">
-        <div class="service-number">01</div>
-        <div class="service-icon">🎯</div>
-        <h3>Auditoría de Ingeniería Social</h3>
-         <p style="font-size:0.75rem; color:var(--accent-bright); margin-bottom:0.6rem;">
-Servicio más contratado por empresas medianas y grandes
-</p>
-        <p>Simulaciones autorizadas de phishing, vishing y smishing adaptadas a su sector y perfil de empleados. Medimos tasas de exposición reales, no teóricas.</p>
-        <div class="service-tags">
-          <span class="service-tag">Phishing</span>
-          <span class="service-tag">Vishing</span>
-          <span class="service-tag">Smishing</span>
-          <span class="service-tag">OSINT</span>
-        </div>
-      </div>
-
-      <!-- Seguridad física -->
-      <div class="service-card reveal reveal-delay-2">
-        <div class="service-number">02</div>
-        <div class="service-icon">🔐</div>
-        <h3>Seguridad Física en Oficinas</h3>
-         <p style="font-size:0.75rem; color:var(--accent-bright); margin-bottom:0.6rem;">
-Recomendado para entornos industriales y corporativos críticos
-</p>
-        <p>Evaluación de controles de acceso, procedimientos de visitantes, manejo de documentación y vulnerabilidades de instalaciones. Incluye prueba de intrusión física controlada.</p>
-        <div class="service-tags">
-          <span class="service-tag">Tailgating</span>
-          <span class="service-tag">Acceso físico</span>
-          <span class="service-tag">Instalaciones</span>
-        </div>
-      </div>
-
-      <!-- Auditoría IA -->
-      <div class="service-card reveal reveal-delay-3">
-        <div class="service-number">03</div>
-        <div class="service-icon">🤖</div>
-        <h3>Auditoría de Adopción Segura de IA</h3>
-         <p style="font-size:0.75rem; color:var(--accent-bright); margin-bottom:0.6rem;">
-Servicio emergente para control de exposición de datos en IA
-</p>
-        <p>Análisis de cómo su organización utiliza herramientas de IA generativa. Identificamos flujos de información con riesgo de exposición y diseñamos una política de uso responsable.</p>
-        <div class="service-tags">
-          <span class="service-tag">IA generativa</span>
-          <span class="service-tag">Fuga de datos</span>
-          <span class="service-tag">Política IA</span>
-        </div>
-      </div>
-
-      <!-- Formación -->
-      <div class="service-card reveal reveal-delay-4">
-        <div class="service-number">04</div>
-        <div class="service-icon">📚</div>
-        <h3>Formación en Concienciación</h3>
-         <p style="font-size:0.75rem; color:var(--accent-bright); margin-bottom:0.6rem;">
-Ideal para cumplimiento normativo y reducción de incidentes internos
-</p>
-        <p>Programas formativos basados en los resultados de las auditorías. Talleres presenciales y módulos online adaptados por nivel de riesgo y perfil de empleado.</p>
-        <div class="service-tags">
-          <span class="service-tag">Talleres</span>
-          <span class="service-tag">Módulos e-learning</span>
-          <span class="service-tag">Simulaciones</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="service-cta-row reveal">
-      <a href="#contacto" class="btn btn-primary">Solicitar propuesta personalizada</a>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     METODOLOGÍA
-     ============================================================ -->
-<section id="metodologia" class="section">
-  <div class="container">
-    <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 5rem; align-items:start;">
-
-      <div class="method-header reveal" style="position:sticky; top: 96px;">
-        <div class="label">Metodología</div>
-        <div class="section-divider"></div>
-        <h2>Cómo trabajamos</h2>
-        <p style="margin-top:1rem;">Un proceso estructurado y transparente. Sin sorpresas, con autorización expresa en cada fase.</p>
-        <a href="#contacto" class="btn btn-ghost btn-sm" style="margin-top:2rem;">Hablar con un especialista →</a>
-      </div>
-
-      <div class="method-steps reveal">
-        <div class="method-step">
-          <div class="step-marker">
-            <div class="step-num">01</div>
-          </div>
-          <div class="step-content">
-            <div class="step-badge">Discovery</div>
-            <h3>Reunión de alcance y acuerdo legal</h3>
-            <p>Definimos el alcance exacto de la evaluación, firmamos el contrato de autorización y establecemos los puntos de contacto internos. Ninguna acción se realiza sin acuerdo previo por escrito.</p>
-             <p style="margin-top:0.8rem; color:var(--text-secondary);">
-Todas las pruebas se realizan bajo autorización escrita, alcance definido y con contacto de emergencia operativo durante la ejecución.
-</p>
-          </div>
-        </div>
-
-        <div class="method-step">
-          <div class="step-marker">
-            <div class="step-num">02</div>
-          </div>
-          <div class="step-content">
-            <div class="step-badge">Inteligencia</div>
-            <h3>Reconocimiento y análisis OSINT</h3>
-            <p>Recopilamos información públicamente disponible sobre su organización — la misma que usaría un actor malicioso real. Esto contextualiza y personaliza todas las pruebas posteriores.</p>
-          </div>
-        </div>
-
-        <div class="method-step">
-          <div class="step-marker">
-            <div class="step-num">03</div>
-          </div>
-          <div class="step-content">
-            <div class="step-badge">Ejecución</div>
-            <h3>Campaña de pruebas controladas</h3>
-            <p>Realizamos las simulaciones acordadas (phishing, vishing, intrusión física, etc.) con la máxima discreción. El equipo interno no está informado para garantizar la validez de los resultados.</p>
-          </div>
-        </div>
-
-        <div class="method-step">
-          <div class="step-marker">
-            <div class="step-num">04</div>
-          </div>
-          <div class="step-content">
-            <div class="step-badge">Análisis</div>
-            <h3>Análisis de resultados con soporte IA</h3>
-            <p>Procesamos los datos obtenidos con herramientas de análisis propias para identificar patrones, vectores de mayor riesgo y correlaciones entre departamentos o perfiles.</p>
-          </div>
-        </div>
-
-        <div class="method-step">
-          <div class="step-marker">
-            <div class="step-num">05</div>
-          </div>
-          <div class="step-content">
-            <div class="step-badge">Entregable</div>
-            <h3>Informe ejecutivo y plan de remediación</h3>
-            <p>Entregamos dos documentos: un informe técnico detallado y un resumen ejecutivo para dirección. Incluye un plan de remediación priorizado por impacto y coste de implementación.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     DIFERENCIADOR / IA
-     ============================================================ -->
-<section id="diferenciador" class="section">
-  <div class="container">
-    <div class="diferenciador-inner">
-      <div class="diferenciador-text reveal">
-        <div class="label">Ventaja diferencial</div>
-        <div class="section-divider"></div>
-        <h2>Análisis de riesgo humano asistido por IA</h2>
-        <p>Utilizamos inteligencia artificial exclusivamente para análisis interno de datos y generación de informes de riesgo. No sustituye el criterio del consultor.</p>
-        <p>Esto nos permite identificar patrones de comportamiento, correlacionar vulnerabilidades entre departamentos y generar informes personalizados en tiempo récord.</p>
-        <ul class="ia-features" role="list">
-          <li class="ia-feature">
-            <div class="ia-feature-dot" aria-hidden="true"></div>
-            <span>Análisis automatizado de patrones de respuesta en campañas de phishing simulado</span>
-          </li>
-          <li class="ia-feature">
-            <div class="ia-feature-dot" aria-hidden="true"></div>
-            <span>Generación de perfiles de riesgo por departamento y perfil laboral</span>
-          </li>
-          <li class="ia-feature">
-            <div class="ia-feature-dot" aria-hidden="true"></div>
-            <span>Reporting ejecutivo adaptado al nivel de conocimiento técnico de cada audiencia</span>
-          </li>
-          <li class="ia-feature">
-            <div class="ia-feature-dot" aria-hidden="true"></div>
-            <span>Benchmarking sectorial para contextualizar los resultados frente al mercado</span>
-          </li>
+    <div class="section-label reveal">Servicios</div>
+    <h2 class="section-title reveal">Lo que hacemos</h2>
+    <p class="section-sub reveal">Cada encargo se adapta a la estructura, el sector y el nivel de exposición de su organización.</p>
+    <div class="servicios__grid">
+      <div class="srv-card reveal">
+        <div class="srv-card__tag">Evaluación</div>
+        <h3>Ingeniería social autorizada</h3>
+        <p>Simulaciones controladas de phishing, vishing y pretexting para medir la exposición real de su organización ante ataques de manipulación.</p>
+        <ul>
+          <li>Campañas de phishing personalizadas</li>
+          <li>Llamadas de vishing con pretexto real</li>
+          <li>Informe ejecutivo + técnico</li>
         </ul>
       </div>
+      <div class="srv-card reveal">
+        <div class="srv-card__tag">Evaluación</div>
+        <h3>Pentesting físico</h3>
+        <p>Evaluación in situ de los controles de acceso, la seguridad perimetral y el comportamiento del personal ante intrusiones no autorizadas.</p>
+        <ul>
+          <li>Tailgating y acceso no autorizado</li>
+          <li>Inspección de dispositivos y puertos</li>
+          <li>Escenarios de red team físico</li>
+        </ul>
+      </div>
+      <div class="srv-card reveal">
+        <div class="srv-card__tag">Auditoría</div>
+        <h3>Auditoría de riesgo humano</h3>
+        <p>Análisis estructurado del nivel de exposición organizacional: procesos, políticas, cultura de seguridad y comportamiento del equipo.</p>
+        <ul>
+          <li>Entrevistas y análisis de procesos</li>
+          <li>Mapa de riesgos por departamento</li>
+          <li>Plan de remediación priorizado</li>
+        </ul>
+      </div>
+      <div class="srv-card reveal">
+        <div class="srv-card__tag">Formación</div>
+        <h3>Formación en ciberseguridad</h3>
+        <p>Programas de concienciación diseñados a medida, con ejercicios prácticos, no presentaciones genéricas de 40 diapositivas.</p>
+        <ul>
+          <li>Talleres presenciales y online</li>
+          <li>Simulacros post-formación</li>
+          <li>Módulos para dirección y equipo técnico</li>
+        </ul>
+      </div>
+      <div class="srv-card reveal">
+        <div class="srv-card__tag">Auditoría</div>
+        <h3>Auditoría de uso seguro de IA</h3>
+        <p>Evaluación de cómo su equipo utiliza herramientas de inteligencia artificial y qué información corporativa está en riesgo de exposición.</p>
+        <ul>
+          <li>Inventario de herramientas IA en uso</li>
+          <li>Evaluación de fugas de datos</li>
+          <li>Política de uso responsable</li>
+        </ul>
+      </div>
+      <div class="srv-card srv-card--cta reveal">
+        <p class="srv-cta__pre">¿No encuentra lo que busca?</p>
+        <h3>Hablemos de su caso</h3>
+        <p>Cada organización tiene riesgos distintos. Diseñamos el encargo que su empresa necesita.</p>
+        <a href="#contacto" class="btn-primary">Contactar</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <div class="ia-visual reveal reveal-delay-2">
-        <div class="ia-terminal" role="region" aria-label="Ejemplo de análisis">
-          <span class="t-muted"># Análisis de campaña — Q4 Simulación</span><br>
-          <span class="t-muted">──────────────────────────────────</span><br>
-          <span class="t-green">✓</span> Campaña ejecutada: <span class="t-white">847 objetivos</span><br>
-          <span class="t-green">✓</span> Vectores activos: <span class="t-white">Email / SMS / Voz</span><br>
-          <span class="t-blue">→</span> Tasa de click: <span class="t-white">23.4%</span><br>
-          <span class="t-blue">→</span> Credenciales cedidas: <span class="t-white">8.7%</span><br>
-          <span class="t-blue">→</span> Dpto. mayor riesgo: <span class="t-white">Finanzas</span><br>
-          <span class="t-muted">──────────────────────────────────</span><br>
-          <span class="t-green">✓</span> Informe ejecutivo: <span class="t-white">generado</span><br>
-          <span class="t-green">✓</span> Plan remediación: <span class="t-white">12 acciones</span>
+<!-- METODOLOGÍA -->
+<section class="metodologia" id="metodologia">
+  <div class="container">
+    <div class="section-label reveal">Cómo trabajamos</div>
+    <h2 class="section-title reveal">Metodología</h2>
+    <div class="met__steps">
+      <div class="met__step reveal">
+        <div class="met__n">01</div>
+        <div class="met__content">
+          <h4>Diagnóstico inicial</h4>
+          <p>Reunión sin compromiso para entender el contexto, los activos críticos y los objetivos del encargo. Sin formularios genéricos.</p>
         </div>
+      </div>
+      <div class="met__step reveal">
+        <div class="met__n">02</div>
+        <div class="met__content">
+          <h4>Diseño del escenario</h4>
+          <p>Creamos un plan de evaluación adaptado a su sector, tamaño y exposición. Nada es estándar porque su empresa no lo es.</p>
+        </div>
+      </div>
+      <div class="met__step reveal">
+        <div class="met__n">03</div>
+        <div class="met__content">
+          <h4>Ejecución controlada</h4>
+          <p>Llevamos a cabo las pruebas con total discreción, bajo acuerdo de confidencialidad y con un perímetro definido con precisión.</p>
+        </div>
+      </div>
+      <div class="met__step reveal">
+        <div class="met__n">04</div>
+        <div class="met__content">
+          <h4>Informe y presentación</h4>
+          <p>Entregamos dos informes: uno ejecutivo para dirección y uno técnico para el equipo IT. Presentación incluida.</p>
+        </div>
+      </div>
+      <div class="met__step reveal">
+        <div class="met__n">05</div>
+        <div class="met__content">
+          <h4>Plan de remediación</h4>
+          <p>No solo señalamos el problema. Acompañamos la corrección con recomendaciones concretas y priorizadas por nivel de riesgo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="ia-metrics">
-          <div class="ia-metric">
-            <div class="ia-metric-val">3×</div>
-            <div class="ia-metric-lbl">más rápido en reporting</div>
+<!-- DIFERENCIADOR -->
+<section class="diferenciador" id="diferenciador">
+  <div class="container">
+    <div class="dif__inner">
+      <div class="dif__left reveal">
+        <div class="section-label">Por qué RicSec</div>
+        <h2>Especialistas en el factor humano. Sin atajos.</h2>
+        <p>No somos una consultora generalista que añade ingeniería social a su catálogo. Es nuestra especialidad central desde el primer día.</p>
+        <p>Cada evaluación la ejecutan profesionales con experiencia real en el sector. Sin subcontratación, sin frameworks genéricos, sin plantillas.</p>
+      </div>
+      <div class="dif__right reveal">
+        <div class="dif__item">
+          <div class="dif__check">✓</div>
+          <div>
+            <strong>Sin conflicto de interés</strong>
+            <p>No vendemos tecnología. No tenemos incentivo para recomendar soluciones que no necesita.</p>
           </div>
-          <div class="ia-metric">
-            <div class="ia-metric-val">98%</div>
-            <div class="ia-metric-lbl">precisión en clasificación</div>
+        </div>
+        <div class="dif__item">
+          <div class="dif__check">✓</div>
+          <div>
+            <strong>Informes legibles</strong>
+            <p>Documentos que dirección puede leer y entender, no solo el equipo técnico.</p>
+          </div>
+        </div>
+        <div class="dif__item">
+          <div class="dif__check">✓</div>
+          <div>
+            <strong>Confidencialidad total</strong>
+            <p>NDA desde la primera conversación. Operamos con discreción absoluta en cada encargo.</p>
+          </div>
+        </div>
+        <div class="dif__item">
+          <div class="dif__check">✓</div>
+          <div>
+            <strong>Cobertura legal</strong>
+            <p>Toda actividad opera bajo autorización formal y documentación jurídica adecuada.</p>
           </div>
         </div>
       </div>
@@ -797,299 +241,180 @@ Todas las pruebas se realizan bajo autorización escrita, alcance definido y con
   </div>
 </section>
 
-
-<!-- ============================================================
-     SOBRE RICSEC
-     ============================================================ -->
-<section id="empresa" class="section">
+<!-- CASOS -->
+<section class="casos" id="casos">
   <div class="container">
-    <div class="empresa-inner">
-      <div class="empresa-text reveal">
-        <div class="label">Sobre RicSec</div>
-        <div class="section-divider"></div>
-        <h2>Experiencia técnica.<br>Criterio de negocio.</h2>
-        <p>RicSec es una consultora especializada en seguridad ofensiva autorizada. Trabajamos con pequeñas y medianas empresas que necesitan evaluar su exposición real al riesgo humano sin contar con un equipo de seguridad interno.</p>
-        <p>Nuestros consultores combinan experiencia en auditorías técnicas con comprensión de los procesos de negocio. Hablamos el idioma de dirección, no solo el de IT.</p>
-        <p>Operamos con autorización expresa en cada proyecto, cumpliendo con el marco legal español y europeo (RGPD, ENS, directiva NIS2).</p>
-         <p>
-Nuestro equipo cuenta con experiencia en red teaming, auditorías de seguridad y evaluación de riesgo humano en entornos corporativos.
-</p>
+    <div class="section-label reveal">Resultados reales</div>
+    <h2 class="section-title reveal">Casos de referencia</h2>
+    <p class="section-sub reveal">Datos anonimizados por acuerdo de confidencialidad con los clientes.</p>
+    <div class="casos__grid">
+      <div class="caso-card reveal">
+        <div class="caso-card__sector">Despacho de abogados · 45 empleados</div>
+        <blockquote>El 68% del equipo entregó credenciales o información sensible en la primera fase de la simulación. Nadie lo esperaba — ni ellos ni nosotros.</blockquote>
+        <div class="caso-card__result">
+          <span class="caso-n">68%</span>
+          <span>tasa de exposición en primera simulación</span>
+        </div>
       </div>
-
-      <div class="empresa-pillars reveal reveal-delay-2">
-        <div class="pillar">
-          <div class="pillar-icon">⚖️</div>
-          <div>
-            <h4>Marco legal garantizado</h4>
-            <p>Cada auditoría opera bajo contrato de autorización expresa. Cumplimiento total con RGPD y legislación española.</p>
-          </div>
+      <div class="caso-card reveal">
+        <div class="caso-card__sector">Empresa industrial · 120 empleados</div>
+        <blockquote>En el pentesting físico accedimos a la sala de servidores en menos de 12 minutos sin forzar ninguna puerta. Solo con actitud y un pretexto convincente.</blockquote>
+        <div class="caso-card__result">
+          <span class="caso-n">12 min</span>
+          <span>para acceder a infraestructura crítica sin credenciales</span>
         </div>
-        <div class="pillar">
-          <div class="pillar-icon">🎯</div>
-          <div>
-            <h4>Orientados a resultados prácticos</h4>
-            <p>No entregamos informes de 200 páginas incomprensibles. Entregamos prioridades claras y pasos concretos.</p>
-          </div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-icon">🤝</div>
-          <div>
-            <h4>Interlocución directa</h4>
-            <p>Acceso directo al consultor responsable del proyecto. Sin capas de intermediación ni cuentas de correo genéricas.</p>
-          </div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-icon">🔒</div>
-          <div>
-            <h4>Confidencialidad absoluta</h4>
-            <p>NDA estándar en todos los proyectos. Sus resultados, vulnerabilidades y datos nunca se comparten ni reutilizan.</p>
-          </div>
+      </div>
+      <div class="caso-card reveal">
+        <div class="caso-card__sector">Consultora financiera · 80 empleados</div>
+        <blockquote>Tres meses después de la formación y el plan de remediación, repetimos la simulación. La tasa de exposición bajó del 71% al 9%.</blockquote>
+        <div class="caso-card__result">
+          <span class="caso-n">−62pp</span>
+          <span>reducción de exposición tras formación y remediación</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-
-<!-- ============================================================
-     CONTACTO
-     ============================================================ -->
-<section id="contacto" class="section">
+<!-- NOSOTROS -->
+<section class="nosotros" id="nosotros">
   <div class="container">
-    <div class="contacto-inner">
-
-      <div class="contacto-info reveal">
-        <div class="label">Contacto</div>
-        <div class="section-divider"></div>
-        <h2>Hablemos de su exposición al riesgo</h2>
-        <p>La primera conversación es gratuita y sin compromiso. En 30 minutos podemos identificar sus vectores de mayor riesgo y si una auditoría tiene sentido para su organización.</p>
-         <p style="margin-top:1.2rem; color:var(--accent-bright);">
-La mayoría de solicitudes reciben respuesta en menos de 24 horas laborables.
-</p>
-
-        <div class="contact-reasons">
-          <div class="contact-reason">Quiero saber si mis empleados caerían en un ataque de phishing</div>
-          <div class="contact-reason">Necesito evaluar los controles de acceso físico en mis instalaciones</div>
-          <div class="contact-reason">Quiero entender el riesgo real de que el equipo use herramientas de IA</div>
-          <div class="contact-reason">Necesito un programa de concienciación para cumplimiento NIS2</div>
-        </div>
-
-        <div class="contact-direct">
-          <p>Prefiere escribir directamente</p>
-          <a href="mailto:hola@ricsec.es">hola@ricsec.es</a>
+    <div class="nos__inner">
+      <div class="nos__left reveal">
+        <div class="section-label">Sobre RicSec</div>
+        <h2>Una consultora pequeña. Un trabajo sin concesiones.</h2>
+        <p>RicSec nació con una premisa clara: la seguridad más crítica no está en el código, está en las personas. Trabajamos con un equipo reducido de especialistas porque preferimos hacer menos encargos y hacerlos bien.</p>
+        <p>Operamos en España y Europa. Trabajamos en español, inglés y portugués. Nuestros clientes son empresas que entienden que la seguridad no es un gasto — es una decisión estratégica.</p>
+        <div class="nos__badges">
+          <div class="badge">Operativa desde 2021</div>
+          <div class="badge">España · Europa</div>
+          <div class="badge">NDA en toda colaboración</div>
         </div>
       </div>
+      <div class="nos__right reveal">
+        <div class="nos__quote">
+          <p>"La pregunta no es si alguien va a intentar engañar a su equipo. La pregunta es cuándo — y si van a estar preparados."</p>
+          <div class="nos__sig">— Equipo RicSec</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <div class="reveal reveal-delay-2">
-        <!--
-          INTEGRACIÓN FORMSPREE:
-          Reemplaza "YOUR_FORM_ID" en action con tu ID de Formspree.
-          Ejemplo: https://formspree.io/f/xabc1234
-        -->
-        <form class="contact-form" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div class="container reveal">
+    <h2>¿Cuándo fue la última vez que puso a prueba a su equipo?</h2>
+    <p>Una conversación de 30 minutos puede cambiar la perspectiva que tiene sobre el riesgo real de su organización.</p>
+    <a href="#contacto" class="btn-primary btn-large">Solicitar reunión inicial gratuita</a>
+  </div>
+</section>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="nombre">Nombre</label>
-              <input type="text" id="nombre" name="nombre" placeholder="Ricardo García" required autocomplete="name">
+<!-- CONTACTO -->
+<section class="contacto" id="contacto">
+  <div class="container">
+    <div class="contacto__inner">
+      <div class="contacto__left reveal">
+        <div class="section-label">Contacto</div>
+        <h2>Hablemos de su empresa</h2>
+        <p>La primera reunión es sin coste. Nos presentamos, escuchamos su situación y le decimos con honestidad si podemos ayudarle y cómo.</p>
+        <div class="contact__info">
+          <div class="contact__item">
+            <span class="contact__label">Email</span>
+            <a href="mailto:contacto@ricsec.com">contacto@ricsec.com</a>
+          </div>
+          <div class="contact__item">
+            <span class="contact__label">Respuesta</span>
+            <span>En menos de 24 horas hábiles</span>
+          </div>
+          <div class="contact__item">
+            <span class="contact__label">Ámbito</span>
+            <span>España y Europa</span>
+          </div>
+        </div>
+      </div>
+      <div class="contacto__right reveal">
+        <form class="form" id="contactForm" novalidate>
+          <div class="form__row">
+            <div class="form__field">
+              <label for="nombre">Nombre y apellido</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Ricardo García" required>
             </div>
-            <div class="form-group">
+            <div class="form__field">
               <label for="empresa">Empresa</label>
-              <input type="text" id="empresa" name="empresa" placeholder="ACME S.L." required autocomplete="organization">
+              <input type="text" id="empresa" name="empresa" placeholder="Nombre de su empresa" required>
             </div>
           </div>
-
-          <div class="form-group">
+          <div class="form__field">
             <label for="email">Email corporativo</label>
-            <input type="email" id="email" name="email" placeholder="nombre@empresa.com" required autocomplete="email">
+            <input type="email" id="email" name="email" placeholder="r.garcia@empresa.com" required>
           </div>
-
-          <div class="form-group">
-            <label for="servicio">Servicio de interés</label>
+          <div class="form__field">
+            <label for="servicio">Área de interés</label>
             <select id="servicio" name="servicio">
-              <option value="">— Seleccionar —</option>
-              <option value="ingenieria-social">Auditoría de ingeniería social</option>
-              <option value="seguridad-fisica">Seguridad física en oficinas</option>
-              <option value="auditoria-ia">Auditoría de adopción de IA</option>
-              <option value="formacion">Formación en concienciación</option>
-              <option value="multiple">Varios servicios</option>
-              <option value="no-se">No estoy seguro / necesito orientación</option>
+              <option value="">Seleccionar...</option>
+              <option>Ingeniería social / Phishing / Vishing</option>
+              <option>Pentesting físico</option>
+              <option>Auditoría de riesgo humano</option>
+              <option>Formación en ciberseguridad</option>
+              <option>Auditoría de uso de IA</option>
+              <option>No lo sé todavía — quiero asesorarme</option>
             </select>
           </div>
-
-          <div class="form-group">
-            <label for="mensaje">Cuéntenos su situación</label>
-            <textarea id="mensaje" name="mensaje" placeholder="Describe brevemente tu empresa, sector y qué tipo de evaluación te interesa. Cualquier detalle ayuda." required></textarea>
+          <div class="form__field">
+            <label for="mensaje">Cuéntenos su situación <span class="optional">(opcional)</span></label>
+            <textarea id="mensaje" name="mensaje" rows="4" placeholder="Descripción breve de su empresa, tamaño del equipo, o cualquier contexto relevante..."></textarea>
           </div>
-
-          <button type="submit" class="btn btn-primary form-submit" id="submitBtn">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-           Solicitar evaluación
-          </button>
-
-          <p class="form-legal">
-            Sus datos se usan exclusivamente para responder a su consulta. No se comparten con terceros. Puede ejercer sus derechos de acceso, rectificación y supresión escribiendo a hola@ricsec.es.
-          </p>
-
-          <div class="form-message" id="formMessage" role="alert" aria-live="polite"></div>
+          <div class="form__footer">
+            <p class="form__legal">Sus datos se tratan conforme al RGPD y no se comparten con terceros.</p>
+            <button type="submit" class="btn-primary">Enviar solicitud</button>
+          </div>
+          <div class="form__success" id="formSuccess">
+            <div class="success__icon">✓</div>
+            <p>Solicitud recibida. Le contactaremos antes de 24 horas hábiles.</p>
+          </div>
         </form>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" style="padding-top:3rem; padding-bottom:3rem;">
-  <div class="container text-center">
-    <div class="label">Cumplimiento y estándares</div>
-    <p style="margin-top:1rem;">
-      RGPD · ENS · NIS2 readiness · Metodología basada en MITRE ATT&CK
-    </p>
-  </div>
-</section>
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-logo">RicSec</div>
-      <div class="footer-links">
-        <a href="#servicios">Servicios</a>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a href="#" class="logo">Ric<span>Sec</span></a>
+      <p>Consultoría de ciberseguridad especializada en riesgo humano.</p>
+    </div>
+    <div class="footer__links">
+      <div class="footer__col">
+        <h5>Servicios</h5>
+        <a href="#servicios">Ingeniería social</a>
+        <a href="#servicios">Pentesting físico</a>
+        <a href="#servicios">Auditoría de riesgo</a>
+        <a href="#servicios">Formación</a>
+        <a href="#servicios">Auditoría de IA</a>
+      </div>
+      <div class="footer__col">
+        <h5>Empresa</h5>
         <a href="#metodologia">Metodología</a>
-        <a href="#empresa">Empresa</a>
+        <a href="#nosotros">Sobre nosotros</a>
         <a href="#contacto">Contacto</a>
-        <a href="mailto:hola@ricsec.es">hola@ricsec.es</a>
+      </div>
+      <div class="footer__col">
+        <h5>Legal</h5>
+        <a href="#">Aviso legal</a>
+        <a href="#">Política de privacidad</a>
+        <a href="#">Política de cookies</a>
       </div>
     </div>
-    <p class="footer-legal">
-      © 2025 RicSec. Todos los derechos reservados. · Consultoría de ciberseguridad ofensiva autorizada · España ·
-      Aviso legal · Política de privacidad
-    </p>
+  </div>
+  <div class="container footer__bottom">
+    <p>© 2025 RicSec. Todos los derechos reservados.</p>
+    <p>Madrid, España · contacto@ricsec.com</p>
   </div>
 </footer>
 
-
-<!-- ============================================================
-     JAVASCRIPT
-     ============================================================ -->
-<script>
-/* ---- NAV scroll behavior ---- */
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 20);
-}, { passive: true });
-
-/* ---- Mobile menu ---- */
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-
-hamburger.addEventListener('click', () => {
-  const isOpen = mobileMenu.classList.toggle('open');
-  hamburger.setAttribute('aria-expanded', isOpen);
-});
-hamburger.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hamburger.click(); }
-});
-
-function closeMobile() {
-  mobileMenu.classList.remove('open');
-  hamburger.setAttribute('aria-expanded', 'false');
-}
-
-/* ---- Scroll reveal ---- */
-const revealElements = document.querySelectorAll('.reveal');
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-
-revealElements.forEach(el => revealObserver.observe(el));
-
-/* ---- Contact form ---- */
-const form       = document.getElementById('contactForm');
-const submitBtn  = document.getElementById('submitBtn');
-const formMsg    = document.getElementById('formMessage');
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  // Basic validation
-  const required = form.querySelectorAll('[required]');
-  let valid = true;
-  required.forEach(field => {
-    if (!field.value.trim()) { field.focus(); valid = false; }
-  });
-  if (!valid) {
-    showFormMessage('Por favor, completa todos los campos obligatorios.', 'error');
-    return;
-  }
-
-  // Email validation
-  const emailField = form.querySelector('#email');
-  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRx.test(emailField.value.trim())) {
-    emailField.focus();
-    showFormMessage('Introduce una dirección de email válida.', 'error');
-    return;
-  }
-
-  // Disable button + show loading
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span style="opacity:.7">Enviando…</span>';
-
-  try {
-    // Si no se ha configurado Formspree, simula éxito
-    const action = form.getAttribute('action');
-    if (action.includes('YOUR_FORM_ID')) {
-      await new Promise(r => setTimeout(r, 1200)); // simulated delay
-      form.reset();
-      showFormMessage('✓ Solicitud enviada. Nos pondremos en contacto en menos de 24h.', 'success');
-    } else {
-      const data = new FormData(form);
-      const response = await fetch(action, {
-        method: 'POST', body: data, headers: { 'Accept': 'application/json' }
-      });
-      if (response.ok) {
-        form.reset();
-        showFormMessage('✓ Solicitud enviada. Nos pondremos en contacto en menos de 24h.', 'success');
-      } else {
-        throw new Error('server');
-      }
-    }
-  } catch {
-    showFormMessage('Algo ha ido mal. Escríbenos directamente a hola@ricsec.es', 'error');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Enviar solicitud';
-  }
-});
-
-function showFormMessage(msg, type) {
-  formMsg.textContent = msg;
-  formMsg.className = `form-message ${type}`;
-  formMsg.style.display = 'block';
-  formMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-/* ---- Active nav link highlighting on scroll ---- */
-const sections = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.nav-links a');
-
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(sec => {
-    if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
-  });
-  navLinks.forEach(a => {
-    a.style.color = a.getAttribute('href') === `#${current}`
-      ? 'var(--text-primary)' : '';
-  });
-}, { passive: true });
-</script>
-
+<script src="main.js"></script>
 </body>
 </html>
